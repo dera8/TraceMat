@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/><title>Maradona · twin</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/><title>TraceMat · Maradona</title>
 <style>
  html,body{margin:0;height:100%;background:#eef1f4;color:#1b242c;font-family:-apple-system,Segoe UI,Roboto,sans-serif;overflow:hidden}
  #wrap{display:flex;height:100vh}.pane{position:relative;flex:1;min-width:0;height:100%}#div{width:2px;background:#c7d0d8;flex:none}
@@ -11,11 +11,13 @@
  .tg{display:inline-block;cursor:pointer;user-select:none;padding:7px 12px;border:1px solid #c7d0d8;border-radius:7px;margin:0;font-size:15px;background:#fff;color:#1b242c;white-space:nowrap}
  .tg.off{opacity:.42}.tg.rain{border-color:#4a7fa3}.tg.rain.on{background:#dff0f7;border-color:#2f8fc0;color:#155a7d}
  #leg{position:fixed;top:106px;left:16px;z-index:6;background:rgba(255,255,255,.94);border:1px solid #d3dce1;border-radius:10px;padding:10px 13px;font-size:14px;line-height:1.65;max-height:calc(100vh - 122px);overflow:auto}
- #leg .row{display:flex;align-items:center;gap:8px;color:#46525c}#leg svg{flex:none}
+ #leg .row{display:flex;align-items:center;gap:10px;color:#1b242c}#leg svg{flex:none;zoom:1.4}
  #themeLeg{position:fixed;top:106px;left:16px;z-index:6;background:rgba(255,255,255,.94);border:1px solid #d3dce1;border-radius:10px;padding:10px 13px;font-size:14px;line-height:1.65;max-width:290px;max-height:calc(100vh - 122px);overflow:auto;display:none}
- #themeLeg .row{display:flex;align-items:center;gap:8px;color:#46525c}
- #themeLeg .sw{width:12px;height:12px;border-radius:3px;flex:none;border:1px solid rgba(0,0,0,.15)}
- #themeLeg .grad{width:100%;height:10px;border-radius:4px;background:linear-gradient(90deg,#050559,#5ac0ff,#f0ffff);margin:4px 0}
+ #leg,#themeLeg{box-sizing:border-box;font-size:20px;font-weight:500;line-height:1.5;padding:14px 18px;background:#fff;max-width:min(360px,calc(100vw - 32px));box-shadow:0 2px 10px rgba(0,0,0,.08)}
+ #themeLeg .row{display:flex;align-items:center;gap:10px;color:#1b242c}
+ #themeLeg .legend-note{margin-top:8px;color:#46525c;font-size:18px;line-height:1.4}
+ #themeLeg .sw{width:18px;height:18px;border-radius:3px;flex:none;border:1px solid rgba(0,0,0,.3)}
+ #themeLeg .grad{width:100%;height:16px;border-radius:4px;background:linear-gradient(90deg,#050559,#5ac0ff,#f0ffff);margin:8px 0}
  #modeInfo{position:fixed;bottom:30px;right:16px;z-index:10;background:rgba(255,247,232,.96);border:1px solid #e0b15a;color:#7a4a10;padding:8px 14px;border-radius:10px;font-size:14px;text-align:right;display:none;max-width:340px}
  #info{position:fixed;bottom:0;left:0;width:455px;max-width:92vw;max-height:52vh;overflow:auto;z-index:8;background:rgba(255,255,255,.97);border-top:1px solid #d3dce1;border-right:1px solid #d3dce1;border-top-right-radius:12px;padding:17px 21px;font-size:16px;display:none;box-shadow:0 4px 24px rgba(0,0,0,.12)}
  #info h2{margin:0 0 4px;font-size:21px;color:#0f7a7a}#info .s{color:#5c6b76;font-size:14px;margin-bottom:10px}
@@ -73,13 +75,52 @@
   #ctl{top:7px;right:8px;max-width:240px}
   .tg{font-size:10px;padding:4px 7px}
   #nlq{top:48px;left:8px;right:8px;width:auto;transform:none}
-  #leg,#themeLeg{top:102px;left:8px;max-width:170px;font-size:9.5px}
+  #leg,#themeLeg{top:102px;left:8px;max-width:min(280px,calc(100vw - 16px));max-height:calc(100vh - 118px);font-size:16px;padding:10px 12px}
+  #themeLeg .legend-note{font-size:16px}
   #info{width:calc(100vw - 28px);max-height:40vh;padding:10px 12px}
  }
-</style><script src="web/frozen_queries.js"></script><script src="web/query_engine.js"></script></head><body><div style="position:fixed;bottom:8px;right:12px;z-index:12;font-size:10px;color:#5c6b76">The LLM translates the question; the graph computes the exact answer.</div>
+
+ /* Keep readable cards in flow so expanded content cannot overlap. */
+ #viewerUI{position:fixed;inset:0;z-index:11;display:flex;flex-direction:column;gap:12px;padding:12px 16px;box-sizing:border-box;pointer-events:none}
+ #viewerUI *{box-sizing:border-box}
+ #viewerHeader{display:grid;grid-template-columns:minmax(200px,1fr) minmax(320px,500px) minmax(240px,1fr);align-items:start;gap:16px;flex:none}
+ #viewerHeader #title,#viewerHeader #ctl,#viewerHeader #nlq{position:static;transform:none;width:auto;max-width:none;margin:0}
+ #viewerHeader #title{font-size:20px;padding-top:4px}
+ #viewerHeader #ctl{justify-self:end;max-width:310px}
+ #viewerHeader #nlq{min-width:0}
+ #viewerHeader #nlqBar{flex-wrap:wrap}
+ #viewerHeader #nlqQ{min-width:100px;width:0}
+ #viewerHeader #nlqHelp,#viewerHeader #nlqOut{max-height:28vh;overflow:auto;flex-shrink:0}
+ #viewerCards{display:flex;justify-content:space-between;gap:16px;flex:1;min-height:0;pointer-events:none}
+ #viewerDetails{display:flex;flex-direction:column;gap:12px;width:360px;max-width:48%;min-height:0}
+ #viewerNotices{display:flex;flex-direction:column;justify-content:flex-end;gap:12px;width:340px;max-width:48%;min-height:0}
+ #viewerDetails #leg,#viewerDetails #themeLeg,#viewerDetails #info,#viewerNotices #banner,#viewerNotices #modeInfo{position:static;width:100%;max-width:none;max-height:100%;min-height:0;margin:0;overflow:auto;flex:0 1 auto;pointer-events:auto}
+ #viewerDetails #info{border:1px solid #d3dce1;border-radius:10px;overflow-wrap:anywhere;padding:14px 16px}
+ #viewerNotices #banner{white-space:normal;border-radius:10px}
+ #viewerNotices #modeInfo{text-align:left}
+ #viewerHeader #ctl,#viewerHeader #nlq{pointer-events:auto}
+ #info .kv{gap:12px;flex-wrap:wrap}
+ @media(max-width:1100px){
+  #viewerHeader{grid-template-columns:1fr 1fr;gap:10px}
+  #viewerHeader #nlq{grid-row:2;grid-column:1 / -1;width:min(600px,100%);justify-self:center}
+  #viewerHeader #ctl{grid-column:2;grid-row:1}
+ }
+ @media(max-width:680px){
+  #viewerUI{padding:8px;gap:8px}
+  #viewerHeader{gap:8px;grid-template-columns:1fr}
+  #viewerHeader #title{font-size:18px}
+  #viewerHeader #ctl{grid-column:1;grid-row:2;justify-self:start;justify-content:flex-start;max-width:none}
+  #viewerHeader #nlq{grid-row:3}
+  #viewerHeader .tg{font-size:13px;padding:5px 8px}
+  #viewerCards{display:block;overflow:auto;pointer-events:auto}
+  #viewerDetails,#viewerNotices{width:100%;max-width:none;gap:8px}
+  #viewerNotices{margin-top:8px}
+  #viewerDetails #leg,#viewerDetails #themeLeg,#viewerDetails #info,#viewerNotices #modeInfo,#viewerNotices #banner{max-height:40vh;flex:none}
+ }
+</style></head><body><div style="position:fixed;bottom:8px;right:12px;z-index:12;font-size:10px;color:#5c6b76">The LLM translates the question; the graph computes the exact answer.</div>
 <div id="load"><div style="font-size:14px;color:#93a4af">loading assets/maradona_demo.glb …</div><div class="b"><div class="f" id="pf"></div></div><div id="err"></div></div>
 <div id="wrap"><div class="pane" id="p3d"><canvas id="c3d"></canvas></div><div id="div"></div><div class="pane" id="pg"><canvas id="cg"></canvas></div></div>
-<div id="title">Maradona · digital twin</div><div id="sub">3D real PBR · click a surface&nbsp;|&nbsp;graph · click a node&nbsp;|&nbsp;toggle rain to see the state change</div>
+<div id="title">TraceMat · Maradona</div><div id="sub">Traceable material-aware urban knowledge · select a surface or graph node</div>
 <div id="ctl"><span class="tg" id="tMode">PBR</span><span class="tg rain off" id="tRain">☂ rain</span><br/>
  <span class="tg" id="tP">part_of</span><span class="tg" id="tT">touches</span><span class="tg" id="tN">nearby</span><span class="tg" id="tFocus">focus</span></div>
 <div id="nlq">
@@ -113,6 +154,16 @@
 <div id="themeLeg"></div>
 <div id="modeInfo"></div>
 <div id="info"></div><div id="banner"></div>
+<script>
+// Group overlays before loading the scene; all existing IDs and handlers remain valid.
+const viewerUI=document.createElement('div');viewerUI.id='viewerUI';
+viewerUI.innerHTML='<div id="viewerHeader"></div><div id="viewerCards"><div id="viewerDetails"></div><div id="viewerNotices"></div></div>';
+document.body.appendChild(viewerUI);
+for(const [parent,ids] of [['viewerHeader',['title','nlq','ctl']],['viewerDetails',['leg','themeLeg','info']],['viewerNotices',['banner','modeInfo']]]){
+ for(const id of ids)document.getElementById(parent).appendChild(document.getElementById(id));
+}
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -163,27 +214,23 @@ const PAPER_LIDAR_INTERVALS={
  vegetation:[27500,31000],brick:[28400,31500]
 };
 function fetchJSON(url){return fetch(url).then(r=>r.ok?r.json():null).catch(()=>null);}
-Promise.all([
- fetchJSON('experiments/results/radio/final_radio_manifest.json'),
- fetchJSON('experiments/results/lidar/final_lidar_viewer_overlay.json'),
-]).then(([radio,lidar])=>{
- // match on GRAPH_FILE (code-style scene id, e.g. "CanaryWharf"), NOT
- // D.scene (a display title, e.g. "Canary Wharf" WITH a space) - the
- // radio/lidar result files use the same code-style id as graphs/*.json.
- // Matching against D.scene silently produced zero matches for any scene
- // whose display title differs from its code id (Canary Wharf), leaving
- // every mesh with no record and defaulting to the "excluded/missing" grey.
- // Index BOTH the exact source_mesh_name and its space<->underscore variant:
- // some scenes' source_mesh_name has literal spaces ("Road w562544324")
- // while the THREE.js mesh name for the same surface is underscored
- // ("Road_w562544324") - the mismatch direction isn't the same in every
- // scene, so both directions are registered up front rather than guessed
- // per-lookup.
- const indexBoth=(map,r)=>{map.set(r.source_mesh_name,r);map.set(r.source_mesh_name.replace(/ /g,'_'),r);map.set(r.source_mesh_name.replace(/_/g,' '),r);};
- if(radio&&radio.records){radio.records.forEach(r=>{if(r.scene===GRAPH_FILE&&r.source_mesh_name)indexBoth(RADIO_BY_MESH,r);});}
- if(lidar&&lidar.records){Object.values(lidar.records).forEach(r=>{if(r.scene===GRAPH_FILE&&r.source_mesh_name)indexBoth(LIDAR_BY_MESH,r);});}
- if(VIEW_MODE==='radio'||VIEW_MODE==='lidar'){applyMode();drawGraph();}
-});
+const OVERLAY_LOADS=new Map();
+function ensureOverlay(mode){
+ if(!['radio','lidar'].includes(mode))return Promise.resolve();
+ if(OVERLAY_LOADS.has(mode))return OVERLAY_LOADS.get(mode);
+ const path=mode==='radio'?'experiments/results/radio/final_radio_manifest.json':'experiments/results/lidar/final_lidar_viewer_overlay.json';
+ const task=fetch(path).then(r=>{if(!r.ok)throw new Error('Overlay unavailable ('+r.status+')');return r.json();}).then(data=>{
+  const map=mode==='radio'?RADIO_BY_MESH:LIDAR_BY_MESH;
+  const records=Array.isArray(data.records)?data.records:Object.values(data.records||{});
+  for(const r of records){if(r.scene!==GRAPH_FILE||!r.source_mesh_name)continue;
+   for(const name of [r.source_mesh_name,r.source_mesh_name.replace(/ /g,'_'),r.source_mesh_name.replace(/_/g,' ')])map.set(name,r);
+  }
+  byOid.forEach(items=>items.forEach(o=>{for(const key of mode==='radio'?['_radioMat']:['_lidarMatWet','_lidarMatDry']){if(o.userData[key])o.userData[key].dispose();delete o.userData[key];}}));
+  if(VIEW_MODE===mode){updateModeUI();applyMode();drawGraph();}
+ }).catch(error=>{OVERLAY_LOADS.delete(mode);const panel=document.getElementById('modeInfo');panel.style.display='block';panel.textContent=error.message+'. Select this layer again to retry.';});
+ OVERLAY_LOADS.set(mode,task);return task;
+}
+
 let QSET=null,QOIDS=null; // active NL-query highlight set (mesh names / osm_ids), overrides single SEL highlighting while non-null
 // Unknown material remains in scope for wall/roof/window/road surfaces.
 // It is still shown (never hidden), but visually muted/
@@ -389,6 +436,7 @@ function themedMaterial(o,kind){
  return m;
 }
 function applyMode(){
+ ensureOverlay(VIEW_MODE);
  byOid.forEach(arr=>arr.forEach(o=>{if(!o.userData)return;
   o.material=VIEW_MODE==='pbr'?o.userData.pbrMat:VIEW_MODE==='semantic'?o.userData.semMat:themedMaterial(o,VIEW_MODE);
   // every surface visibly wets under rain (a thin water film forms on
@@ -743,13 +791,13 @@ function updateModeUI(){
   let h='<b>radio materials</b><br/>';
   [...present].sort().forEach(m=>{h+=`<div class="row"><span class="sw" style="background:${RADIO_MAT_COLORS[m]||RADIO_MISSING_COLOR}"></span>${m}</div>`;});
   h+=`<div class="row"><span class="sw" style="background:${RADIO_MISSING_COLOR}"></span>excluded / missing</div>`;
-  h+='<div style="margin-top:5px;color:#7c8891">colour: material class · εr and σ at 3.5 GHz from ITU-R P.2040-4 (09/2025), Table 3, where mapped; declared proxies otherwise</div>';
+  h+='<div class="legend-note">colour: material class · εr and σ at 3.5 GHz from ITU-R P.2040-4 (09/2025), Table 3, where mapped; declared proxies otherwise</div>';
   tleg.innerHTML=h;
   info.textContent='Radio-material assignment at 3.5 GHz. ITU-R P.2040-4 (09/2025), Table 3, where mapped; declared proxies are retained in provenance. No propagation field is computed.';
  } else {
   let h=`<b>LiDAR spectral-reflectance prior · ${RAIN?'wet_surface':'dry'} · 903.9 nm</b><div class="grad"></div><div class="row" style="justify-content:space-between"><span>low</span><span>high</span></div>`;
   h+=`<div class="row" style="margin-top:4px"><span class="sw" style="background:${RADIO_MISSING_COLOR}"></span>excluded / missing</div>`;
-  h+=RAIN?'<div style="margin-top:5px;color:#7c8891">Wet-surface prior · low confidence · first-order literature/engineering model · not calibrated sensor response</div>':'<div style="margin-top:5px;color:#7c8891">Dry material-level spectral-reflectance prior; not calibrated sensor response</div>';
+  h+=RAIN?'<div class="legend-note">Wet-surface prior · low confidence · first-order literature/engineering model · not calibrated sensor response</div>':'<div class="legend-note">Dry material-level spectral-reflectance prior; not calibrated sensor response</div>';
   tleg.innerHTML=h;
   info.textContent=RAIN?'Wet-surface state at 903.9 nm: first-order low-confidence prior, not a calibrated sensor response.':'Dry spectral-reflectance prior at 903.9 nm; not calibrated LiDAR intensity or return probability.';
  }
@@ -771,8 +819,8 @@ document.getElementById('tRain').onclick=function(){RAIN=!RAIN;this.classList.to
 // is computed exactly here, then highlighted on BOTH the 3D meshes (by mesh
 // name -> byMeshName) and the graph panel (by osm_id -> QOIDS) at once.
 let NLQ_FULL_RESULT=null,NLQ_ACTIVE_FILTER=null,NLQ_DISPLAYED=null,NLQ_HEADER_HTML='',NLQ_DISCLAIMER_HTML='';
-const OLLAMA_URL='http://localhost:11434',NLQ_MODEL='qwen2.5:7b';
-const NLQ_DISCLAIMER='LLM writes the query; the answer is computed exactly over the graph.';
+
+const NLQ_DISCLAIMER='Frozen typed query; results computed over the graph in this browser.';
 const FIELD_EXPANSION={permittivity:['permittivity_dry','permittivity_wet'],conductivity:['conductivity_dry','conductivity_wet'],thermal:['heat_capacity','emissivity','thermal_conductivity']};
 const SCHEMA_PROMPT=`You translate a natural-language question about an urban
 material scene graph into ONE structured query. You never answer the
@@ -880,7 +928,7 @@ Nothing else. No markdown, no code fences, no text after the JSON line.`;
 let NLQ_GRAPH=null;
 async function loadNlqGraph(){
  if(NLQ_GRAPH)return NLQ_GRAPH;
- const res=await fetch(`../data/graphs/${GRAPH_FILE}_graph.json?v=${Date.now()}`);
+ const res=await fetch(`../data/graphs/${GRAPH_FILE}_graph.json`);
  if(!res.ok)throw new Error(`could not load graphs/${GRAPH_FILE}_graph.json (${res.status})`);
  const data=await res.json();
  NLQ_GRAPH={nodes:new Map(data.nodes.map(n=>[n.id,n])),edges:data.edges};
@@ -1116,60 +1164,12 @@ function nlqExecute(g,query,warnings){
  if(op==='nearest_street')return q_nearest_street(g,query);
  throw new Error(`unknown op '${query.op}' - not in the allowed schema`);
 }
-async function nlqCheckOllama(){
- let r;try{r=await fetch(`${OLLAMA_URL}/api/tags`);}catch(e){throw new Error(`Could not reach Ollama at ${OLLAMA_URL}. Start it with: ollama serve`);}
- if(!r.ok)throw new Error(`Ollama replied with ${r.status}`);
- const names=((await r.json()).models||[]).map(m=>m.name||'');
- if(!names.some(n=>n.startsWith(NLQ_MODEL)))throw new Error(`Ollama is running but '${NLQ_MODEL}' is not pulled. Run: ollama pull ${NLQ_MODEL}`);
-}
-async function nlqCallOllama(prompt){
- const r=await fetch(`${OLLAMA_URL}/api/generate`,{method:'POST',headers:{'Content-Type':'application/json'},
-  body:JSON.stringify({model:NLQ_MODEL,prompt,stream:false,options:{temperature:0}})});
- if(!r.ok)throw new Error(`Ollama request failed (${r.status})`);
- return(await r.json()).response;
-}
-function nlqParseReply(raw){
- const thinkM=raw.match(/<think>([\s\S]*?)<\/think>/);const think=thinkM?thinkM[1].trim():'';
- const rest=thinkM?raw.slice(thinkM.index+thinkM[0].length):raw;
- const jsonM=rest.match(/\{[\s\S]*\}/);if(!jsonM)return{think,query:null};
- try{return{think,query:JSON.parse(jsonM[0])};}catch(e){return{think,query:null};}
-}
 function nlqDirectQuery(question){
  const q=String(question||'').trim();
  const m=q.match(/(?:nearest|closest)\s+street\s+(?:to|near)\s+(.+?)[?.!]*$/i)||q.match(/strada\s+pi.{1,3}vicina\s+a\s+(.+?)[?.!]*$/i);
  return m&&m[1]?{think:'The question matches the deterministic nearest-street spatial operation.',query:{op:'nearest_street',street_name:m[1].trim()}}:null;
 }
-async function nlqTranslate(question){
- const prompt=`${SCHEMA_PROMPT}\nQuestion: ${question}\n`;
- let{think,query}=nlqParseReply(await nlqCallOllama(prompt));
- const attempts=[];
- if(!query){
-  attempts.push('not parseable JSON');
-  const stricter=`${prompt}\nYour previous reply could not be parsed. Reply again with EXACTLY: <think>...</think> then, on its own line, ONE valid JSON object and nothing else.`;
-  ({think,query}=nlqParseReply(await nlqCallOllama(stricter)));
-  if(!query){attempts.push('not parseable JSON');throw new Error(`LLM did not produce a parseable query after ${attempts.length} attempts.`);}
- }
- // FIX 1: a query that PARSES but fails schema/key validation must never be
- // silently executed with its bad fields dropped - one corrective retry
- // with the SPECIFIC validation error, then give up loudly instead of
- // running a misleadingly-broad query.
- try{
-  query=nlqValidateQuery(query);
-  return{think,query};
- }catch(e){
-  attempts.push(e.message);
-  const correction=`${prompt}\nYour previous reply was:\n${JSON.stringify(query)}\nThat query is invalid: ${e.message}\nReply again, fixing exactly this problem, in the same output format.`;
-  const retry=nlqParseReply(await nlqCallOllama(correction));
-  if(!retry.query){attempts.push('not parseable JSON');throw new Error(`Could not produce a valid query after ${attempts.length} attempts:\n${attempts.join('\n')}`);}
-  try{
-   const validated=nlqValidateQuery(retry.query);
-   return{think:retry.think,query:validated};
-  }catch(e2){
-   attempts.push(e2.message);
-   throw new Error(`Could not produce a valid query after ${attempts.length} attempts:\n${attempts.join('\n')}`);
-  }
- }
-}
+
 function nlqClearHighlight(){
  QSET=null;QOIDS=null;QSET_MUTED=null;NLQ_FULL_RESULT=null;NLQ_ACTIVE_FILTER=null;NLQ_DISPLAYED=null;
  document.getElementById('nlqClear').style.display='none';
@@ -1259,12 +1259,12 @@ async function nlqAsk(){
  const qEl=document.getElementById('nlqQ'),question=qEl.value.trim();if(!question)return;
  const out=document.getElementById('nlqOut');
  nlqBusy=true;document.getElementById('nlqGo').disabled=true;
- out.style.display='block';out.innerHTML='thinking…';
+ out.style.display='block';out.innerHTML='Executing query…';
  try{
   const g=await loadNlqGraph();
   const direct=nlqDirectQuery(question);
-  if(!direct)await nlqCheckOllama();
-  const{think,query}=direct||await nlqTranslate(question);
+  if(!direct)throw new Error('Choose a controlled query from the list.');
+  const{think,query}=direct;
   const warnings=[];
   const result=nlqExecute(g,query,warnings);
   // a radio/LiDAR question should actually SHOW the thematic heatmap, not
@@ -1330,4 +1330,4 @@ function resize(){const a=document.getElementById('p3d').getBoundingClientRect()
 addEventListener('resize',resize);resize();
 (function loop(){requestAnimationFrame(loop);const t=performance.now(),dt=Math.min((t-(loop._t||t))/1000,.1);loop._t=t;
  if(controls)controls.update();updateRainFX(dt);rn.render(sc,cam);})();
-</script></body></html>
+</script><script src="web/public_demo.js"></script></body></html>
