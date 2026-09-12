@@ -1,0 +1,193 @@
+{
+ "scene": "Maradona",
+ "note": "Canonical queries for the frozen benchmark questions. The query shown for each question is the reference compilation used in the paper's evaluation, not a live compilation; execution over the graph is performed in the browser and is deterministic.",
+ "questions": [
+  {
+   "id": "C1",
+   "audience": "citizen",
+   "question": "Show me all glass surfaces in the scene.",
+   "query": {
+    "op": "filter",
+    "material_class": "glass"
+   }
+  },
+  {
+   "id": "C2",
+   "audience": "citizen",
+   "question": "Which road surfaces are marked wettable by the rain-exposure model?",
+   "query": {
+    "op": "filter",
+    "surface": "road",
+    "wettable": true
+   }
+  },
+  {
+   "id": "C3",
+   "audience": "expert",
+   "question": "What does the graph record about OSM building 915551373, including its components and neighbouring buildings?",
+   "query": {
+    "op": "provenance",
+    "osm_id": "915551373"
+   }
+  },
+  {
+   "id": "C4",
+   "audience": "expert",
+   "question": "Which in-scope surfaces retain an unknown canonical material class?",
+   "query": {
+    "op": "filter",
+    "material_class": "unknown"
+   }
+  },
+  {
+   "id": "E1",
+   "audience": "expert",
+   "question": "Which surfaces are affected by the modeled wet state?",
+   "query": {
+    "op": "state_change",
+    "state": "wet"
+   }
+  },
+  {
+   "id": "E2",
+   "audience": "expert",
+   "question": "Which permittivity and conductivity fields are recorded for glass surfaces at 3.5 GHz?",
+   "query": {
+    "op": "cross_modal",
+    "material_class": "glass",
+    "return": [
+     "permittivity",
+     "conductivity"
+    ]
+   }
+  },
+  {
+   "id": "E3",
+   "audience": "expert",
+   "question": "Show all surfaces whose property confidence is at most 0.5.",
+   "query": {
+    "op": "quality",
+    "max_confidence": 0.5
+   }
+  },
+  {
+   "id": "E4",
+   "audience": "expert",
+   "question": "Which asphalt road surfaces are classified as wettable?",
+   "query": {
+    "op": "filter",
+    "surface": "road",
+    "material_class": "asphalt",
+    "wettable": true
+   }
+  },
+  {
+   "id": "Q11",
+   "audience": "expert",
+   "question": "Which 100-m areas contain the highest density of surfaces with a modeled dry--wet state change?",
+   "query": {
+    "op": "grid",
+    "cell_m": 100.0,
+    "min_surfaces": 10
+   }
+  },
+  {
+   "id": "Q12",
+   "audience": "expert",
+   "question": "Rank the top 5 entities whose electromagnetic signature changes most when it rains.",
+   "query": {
+    "op": "score",
+    "top": 5
+   }
+  },
+  {
+   "id": "Q13",
+   "audience": "citizen",
+   "question": "What is the distribution of surface types (wall, roof, window, road, ...)?",
+   "query": {
+    "op": "distribution",
+    "attribute": "surface"
+   }
+  },
+  {
+   "id": "Q14",
+   "audience": "expert",
+   "question": "For how many surfaces does the permittivity come from the scene catalogue rather than a class default?",
+   "query": {
+    "op": "coverage"
+   }
+  },
+  {
+   "id": "C5",
+   "audience": "citizen",
+   "question": "Which surfaces are currently hidden behind scaffolding?",
+   "query": {
+    "op": "unsupported",
+    "reason": "The graph has no live camera or visual-observation data; it cannot report what is currently visible on site.",
+    "missing_concepts": [
+     "real_world_observation"
+    ]
+   }
+  },
+  {
+   "id": "E5",
+   "audience": "expert",
+   "question": "Which surfaces show cracks in the most recent real-world image?",
+   "query": {
+    "op": "unsupported",
+    "reason": "The graph has no real-world imagery or damage-state attribute for any surface.",
+    "missing_concepts": [
+     "real_world_observation",
+     "temporal_information",
+     "damage_state"
+    ]
+   }
+  },
+  {
+   "id": "Q15",
+   "audience": "expert",
+   "question": "Return the dry-state radio-material parameters for plastered walls at 2.4 GHz.",
+   "query": {
+    "op": "radio_materials",
+    "surface": "wall",
+    "material_contains": "plaster",
+    "frequency_ghz": 2.4
+   }
+  },
+  {
+   "id": "Q16",
+   "audience": "expert",
+   "question": "Which roof or road surfaces change their radio-material parameters between dry and wet states?",
+   "query": {
+    "op": "radio_state_change",
+    "surface_scope": [
+     "roof",
+     "road"
+    ]
+   }
+  },
+  {
+   "id": "Q17",
+   "audience": "expert",
+   "question": "Show roof surfaces ordered by material-derived LiDAR pseudo-reflectance, lowest first.",
+   "query": {
+    "op": "lidar_pseudoreflectance",
+    "surface": "roof",
+    "sort": "ascending"
+   }
+  },
+  {
+   "id": "Q18",
+   "audience": "expert",
+   "question": "Which evaluated roof and road surfaces have a label-supported parent link?",
+   "query": {
+    "op": "provenance_filter",
+    "surface_scope": [
+     "roof",
+     "road"
+    ],
+    "evidence_tier": "label_supported"
+   }
+  }
+ ]
+}
