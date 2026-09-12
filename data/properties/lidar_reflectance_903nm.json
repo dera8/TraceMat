@@ -1,0 +1,796 @@
+{
+  "schema_version": "2.0",
+  "name": "UR-MAT LiDAR Dry/Wet Surface Reflectance Priors at 903 nm",
+  "target_wavelength_nm": 903,
+  "quantity": "spectral_reflectance_priors_by_surface_state",
+  "reflectance_units": "fraction_0_to_1",
+  "intensity_prior_note": "linear_intensity_prior_0_255 is ROUND_HALF_UP(mean_reflectance * 255). It is only a normalized initialization prior and is not raw or calibrated Velodyne HDL-32E intensity.",
+  "recommended_sampling": "For stochastic simulation, sample from a truncated normal distribution using mean, std, min and max; then apply range, incidence-angle, atmospheric and sensor-response models.",
+  "conditions": {
+    "supported_surface_states": [
+      "dry",
+      "wet_surface"
+    ],
+    "wet_values_included": true,
+    "wet_values_type": "first_order_literature_and_engineering_priors",
+    "incidence_angle_note": "The property layer does not model incidence-angle dependence; runtime sensor models must apply it separately.",
+    "wet_calibration_note": "Wet values are first-order surface-state priors and are not calibrated HDL-32E rain responses."
+  },
+  "sources": [
+    {
+      "id": "LUMA_SLUM",
+      "title": "Spectral Library of Impervious Urban Materials",
+      "doi": "10.5281/zenodo.4263842",
+      "use": "905 nm values and urban material proxies"
+    },
+    {
+      "id": "KOTTHAUS_2014",
+      "title": "Derivation of an urban materials spectral library through emittance and reflectance spectroscopy",
+      "doi": "10.1016/j.isprsjprs.2014.05.005",
+      "use": "sample-class mapping and material interpretation"
+    },
+    {
+      "id": "MUCKENHUBER_2020",
+      "title": "Automotive Lidar Modelling Approach Based on Material Properties and Lidar Capabilities",
+      "doi": "10.3390/s20113309",
+      "use": "modelling caveats for material, angle and range dependence"
+    },
+    {
+      "id": "VARGAS_RIVERO_2020",
+      "title": "Weather Classification Using an Automotive LIDAR Sensor Based on Detections on Asphalt and Atmosphere",
+      "doi": "10.3390/s20154306",
+      "use": "Supports an approximately 10 percent average wet-versus-dry reflectivity reduction near 900 nm and explains water-film, BRDF and missed-detection effects."
+    },
+    {
+      "id": "GARABA_2021_WET_DRY",
+      "title": "Spectral reflectance measurements of dry and wet plastic materials, asphalt and concrete clinker",
+      "doi": "10.1594/PANGAEA.937105",
+      "use": "Primary dry/wet hyperspectral dataset spanning 350-1000 nm; useful for later material-specific extraction around 903 nm for asphalt, concrete and plastics."
+    }
+  ],
+  "materials": {
+    "Brick": {
+      "surface_model": "diffuse_mixed",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.3517,
+          "std": 0.1586,
+          "min": 0.1089,
+          "max": 0.6339,
+          "n_samples": 14
+        },
+        "linear_intensity_prior_0_255": 90,
+        "provenance_tier": "dry_sample_backed",
+        "derivation": "mean_of_LUMA_SLUM_brick_samples_at_903.9nm",
+        "sample_ids": [
+          "B001",
+          "B002",
+          "B003",
+          "B004",
+          "B005",
+          "B006",
+          "B007",
+          "B008",
+          "B009",
+          "B010",
+          "B011",
+          "B012",
+          "B013",
+          "B014"
+        ],
+        "confidence": "medium",
+        "measured_for_urmat_class": true,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.7,
+          "max": 1.0
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.3165,
+          "min": 0.2462,
+          "max": 0.3517
+        },
+        "linear_intensity_prior_0_255": 81,
+        "mean_provenance_tier": "wet_literature_prior",
+        "interval_provenance_tier": "wet_engineering_interval",
+        "surface_response_type": "porous_diffuse",
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true,
+        "derivation": "First-order wet-surface mean prior near 900 nm. The mean multiplier is literature-level; minimum and maximum multipliers are engineering uncertainty bounds. Values are neither direct measurements for this UR-MAT class nor calibrated HDL-32E rain responses."
+      }
+    },
+    "Glass": {
+      "surface_model": "specular_transmissive",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.04,
+          "std": 0.03,
+          "min": 0.01,
+          "max": 0.12,
+          "n_samples": 0
+        },
+        "linear_intensity_prior_0_255": 10,
+        "provenance_tier": "dry_engineering_prior",
+        "derivation": "engineering_prior_for_clear_uncoated_glass",
+        "sample_ids": [],
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.35,
+          "max": 1.4
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.036,
+          "min": 0.014,
+          "max": 0.056
+        },
+        "linear_intensity_prior_0_255": 9,
+        "mean_provenance_tier": "wet_literature_prior",
+        "interval_provenance_tier": "wet_engineering_interval",
+        "surface_response_type": "specular_transmissive",
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true,
+        "derivation": "First-order wet-surface mean prior near 900 nm. The mean multiplier is literature-level; minimum and maximum multipliers are engineering uncertainty bounds. Values are neither direct measurements for this UR-MAT class nor calibrated HDL-32E rain responses."
+      },
+      "warnings": [
+        "Return probability depends strongly on incidence angle, coating, dirt, thickness and multi-path effects.",
+        "A scalar multiplier is insufficient for smooth or specular surfaces. Incidence angle and water-film geometry may increase a return near the specular direction while reducing or removing returns elsewhere."
+      ]
+    },
+    "Steel": {
+      "surface_model": "specular_mixed",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.2356,
+          "std": 0.1711,
+          "min": 0.0563,
+          "max": 0.6531,
+          "n_samples": 8
+        },
+        "linear_intensity_prior_0_255": 60,
+        "provenance_tier": "dry_sample_proxy",
+        "derivation": "LUMA_SLUM_metal_class_used_as_proxy_for_steel",
+        "sample_ids": [
+          "Z001",
+          "Z002",
+          "Z003",
+          "Z004",
+          "Z005",
+          "Z006",
+          "Z007",
+          "Z008"
+        ],
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.5,
+          "max": 1.2
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.212,
+          "min": 0.1178,
+          "max": 0.2827
+        },
+        "linear_intensity_prior_0_255": 54,
+        "mean_provenance_tier": "wet_literature_prior",
+        "interval_provenance_tier": "wet_engineering_interval",
+        "surface_response_type": "specular_metal",
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true,
+        "derivation": "First-order wet-surface mean prior near 900 nm. The mean multiplier is literature-level; minimum and maximum multipliers are engineering uncertainty bounds. Values are neither direct measurements for this UR-MAT class nor calibrated HDL-32E rain responses."
+      },
+      "warnings": [
+        "Bare, oxidized, polished and painted steel can produce very different returns.",
+        "A scalar multiplier is insufficient for smooth or specular surfaces. Incidence angle and water-film geometry may increase a return near the specular direction while reducing or removing returns elsewhere."
+      ]
+    },
+    "Tiles": {
+      "surface_model": "diffuse_mixed",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.2304,
+          "std": 0.0818,
+          "min": 0.1295,
+          "max": 0.3788,
+          "n_samples": 12
+        },
+        "linear_intensity_prior_0_255": 59,
+        "provenance_tier": "dry_sample_backed",
+        "derivation": "mean_of_LUMA_SLUM_ceramic_and_cement_roof_tile_samples_at_903.9nm",
+        "sample_ids": [
+          "R001",
+          "R002",
+          "R003",
+          "R004",
+          "R005",
+          "R006",
+          "R007",
+          "R008",
+          "R009",
+          "R010",
+          "R012",
+          "R013"
+        ],
+        "confidence": "medium",
+        "measured_for_urmat_class": true,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.5,
+          "max": 1.2
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.2074,
+          "min": 0.1152,
+          "max": 0.2765
+        },
+        "linear_intensity_prior_0_255": 53,
+        "mean_provenance_tier": "wet_literature_prior",
+        "interval_provenance_tier": "wet_engineering_interval",
+        "surface_response_type": "ceramic_mixed",
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true,
+        "derivation": "First-order wet-surface mean prior near 900 nm. The mean multiplier is literature-level; minimum and maximum multipliers are engineering uncertainty bounds. Values are neither direct measurements for this UR-MAT class nor calibrated HDL-32E rain responses."
+      },
+      "warnings": [
+        "A scalar multiplier is insufficient for smooth or specular surfaces. Incidence angle and water-film geometry may increase a return near the specular direction while reducing or removing returns elsewhere."
+      ]
+    },
+    "Limestone": {
+      "surface_model": "diffuse",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.5024,
+          "std": 0.285,
+          "min": 0.2174,
+          "max": 0.7874,
+          "n_samples": 2
+        },
+        "linear_intensity_prior_0_255": 128,
+        "provenance_tier": "dry_sample_backed",
+        "derivation": "mean_of_LUMA_SLUM_limestone_samples_at_903.9nm",
+        "sample_ids": [
+          "S002",
+          "S004"
+        ],
+        "confidence": "medium_low",
+        "measured_for_urmat_class": true,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.7,
+          "max": 1.0
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.4522,
+          "min": 0.3517,
+          "max": 0.5024
+        },
+        "linear_intensity_prior_0_255": 115,
+        "mean_provenance_tier": "wet_literature_prior",
+        "interval_provenance_tier": "wet_engineering_interval",
+        "surface_response_type": "porous_diffuse",
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true,
+        "derivation": "First-order wet-surface mean prior near 900 nm. The mean multiplier is literature-level; minimum and maximum multipliers are engineering uncertainty bounds. Values are neither direct measurements for this UR-MAT class nor calibrated HDL-32E rain responses."
+      },
+      "warnings": [
+        "Large variation between dark carboniferous and light beige limestone."
+      ]
+    },
+    "Plaster": {
+      "surface_model": "diffuse",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.65,
+          "std": 0.15,
+          "min": 0.35,
+          "max": 0.85,
+          "n_samples": 0
+        },
+        "linear_intensity_prior_0_255": 166,
+        "provenance_tier": "dry_engineering_prior",
+        "derivation": "engineering_prior_for_light_exterior_plaster",
+        "sample_ids": [],
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.7,
+          "max": 1.0
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.585,
+          "min": 0.455,
+          "max": 0.65
+        },
+        "linear_intensity_prior_0_255": 149,
+        "mean_provenance_tier": "wet_literature_prior",
+        "interval_provenance_tier": "wet_engineering_interval",
+        "surface_response_type": "porous_diffuse",
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true,
+        "derivation": "First-order wet-surface mean prior near 900 nm. The mean multiplier is literature-level; minimum and maximum multipliers are engineering uncertainty bounds. Values are neither direct measurements for this UR-MAT class nor calibrated HDL-32E rain responses."
+      },
+      "warnings": [
+        "Pigment, dirt, moisture and aggregate strongly alter NIR reflectance."
+      ]
+    },
+    "Concrete": {
+      "surface_model": "diffuse",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.3406,
+          "std": 0.098,
+          "min": 0.2232,
+          "max": 0.4737,
+          "n_samples": 4
+        },
+        "linear_intensity_prior_0_255": 87,
+        "provenance_tier": "dry_sample_backed",
+        "derivation": "mean_of_LUMA_SLUM_concrete_samples_at_903.9nm",
+        "sample_ids": [
+          "C002",
+          "C004",
+          "C006",
+          "C008"
+        ],
+        "confidence": "medium",
+        "measured_for_urmat_class": true,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.7,
+          "max": 1.0
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.3065,
+          "min": 0.2384,
+          "max": 0.3406
+        },
+        "linear_intensity_prior_0_255": 78,
+        "mean_provenance_tier": "wet_literature_prior",
+        "interval_provenance_tier": "wet_engineering_interval",
+        "surface_response_type": "porous_diffuse",
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true,
+        "derivation": "First-order wet-surface mean prior near 900 nm. The mean multiplier is literature-level; minimum and maximum multipliers are engineering uncertainty bounds. Values are neither direct measurements for this UR-MAT class nor calibrated HDL-32E rain responses."
+      }
+    },
+    "Wood": {
+      "surface_model": "diffuse_anisotropic",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.45,
+          "std": 0.15,
+          "min": 0.2,
+          "max": 0.7,
+          "n_samples": 0
+        },
+        "linear_intensity_prior_0_255": 115,
+        "provenance_tier": "dry_engineering_prior",
+        "derivation": "engineering_prior_for_unpainted_wood_at_near_infrared_wavelengths",
+        "sample_ids": [],
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.7,
+          "max": 1.0
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.405,
+          "min": 0.315,
+          "max": 0.45
+        },
+        "linear_intensity_prior_0_255": 103,
+        "mean_provenance_tier": "wet_literature_prior",
+        "interval_provenance_tier": "wet_engineering_interval",
+        "surface_response_type": "diffuse_anisotropic",
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true,
+        "derivation": "First-order wet-surface mean prior near 900 nm. The mean multiplier is literature-level; minimum and maximum multipliers are engineering uncertainty bounds. Values are neither direct measurements for this UR-MAT class nor calibrated HDL-32E rain responses."
+      },
+      "warnings": [
+        "Species, grain direction, moisture, varnish and paint can substantially change the return."
+      ]
+    },
+    "Cobblestone": {
+      "surface_model": "rough_diffuse",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.4015,
+          "std": 0.0965,
+          "min": 0.2619,
+          "max": 0.5759,
+          "n_samples": 11
+        },
+        "linear_intensity_prior_0_255": 102,
+        "provenance_tier": "dry_sample_proxy",
+        "derivation": "LUMA_SLUM_granite_quartzite_and_sandstone_proxy_at_903.9nm",
+        "sample_ids": [
+          "G001",
+          "G002",
+          "G003",
+          "G004",
+          "G005",
+          "X001",
+          "X002",
+          "X003",
+          "S001",
+          "S003",
+          "S005"
+        ],
+        "confidence": "medium_low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.6,
+          "max": 1.0
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.3614,
+          "min": 0.2409,
+          "max": 0.4015
+        },
+        "linear_intensity_prior_0_255": 92,
+        "mean_provenance_tier": "wet_literature_prior",
+        "interval_provenance_tier": "wet_engineering_interval",
+        "surface_response_type": "rough_diffuse",
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true,
+        "derivation": "First-order wet-surface mean prior near 900 nm. The mean multiplier is literature-level; minimum and maximum multipliers are engineering uncertainty bounds. Values are neither direct measurements for this UR-MAT class nor calibrated HDL-32E rain responses."
+      }
+    },
+    "Slate": {
+      "surface_model": "diffuse_mixed",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.1254,
+          "std": 0.0342,
+          "min": 0.0912,
+          "max": 0.1596,
+          "n_samples": 2
+        },
+        "linear_intensity_prior_0_255": 32,
+        "provenance_tier": "dry_sample_backed",
+        "derivation": "mean_of_clean_and_weathered_LUMA_SLUM_slate_samples_at_903.9nm",
+        "sample_ids": [
+          "L001d",
+          "L001u"
+        ],
+        "confidence": "medium",
+        "measured_for_urmat_class": true,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.5,
+          "max": 1.2
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.1129,
+          "min": 0.0627,
+          "max": 0.1505
+        },
+        "linear_intensity_prior_0_255": 29,
+        "mean_provenance_tier": "wet_literature_prior",
+        "interval_provenance_tier": "wet_engineering_interval",
+        "surface_response_type": "stone_mixed",
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true,
+        "derivation": "First-order wet-surface mean prior near 900 nm. The mean multiplier is literature-level; minimum and maximum multipliers are engineering uncertainty bounds. Values are neither direct measurements for this UR-MAT class nor calibrated HDL-32E rain responses."
+      },
+      "warnings": [
+        "A scalar multiplier is insufficient for smooth or specular surfaces. Incidence angle and water-film geometry may increase a return near the specular direction while reducing or removing returns elsewhere."
+      ]
+    },
+    "Asphalt": {
+      "surface_model": "rough_diffuse",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.174,
+          "std": 0.0524,
+          "min": 0.0905,
+          "max": 0.2421,
+          "n_samples": 9
+        },
+        "linear_intensity_prior_0_255": 44,
+        "provenance_tier": "dry_sample_backed",
+        "derivation": "mean_of_LUMA_SLUM_road_asphalt_samples_at_903.9nm",
+        "sample_ids": [
+          "A001",
+          "A002",
+          "A003",
+          "A004",
+          "A005",
+          "A006",
+          "A008",
+          "A009",
+          "A010"
+        ],
+        "confidence": "medium",
+        "measured_for_urmat_class": true,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.6,
+          "max": 1.0
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.1566,
+          "min": 0.1044,
+          "max": 0.174
+        },
+        "linear_intensity_prior_0_255": 40,
+        "mean_provenance_tier": "wet_literature_prior",
+        "interval_provenance_tier": "wet_engineering_interval",
+        "surface_response_type": "rough_diffuse",
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true,
+        "derivation": "First-order wet-surface mean prior near 900 nm. The mean multiplier is literature-level; minimum and maximum multipliers are engineering uncertainty bounds. Values are neither direct measurements for this UR-MAT class nor calibrated HDL-32E rain responses."
+      }
+    },
+    "Plastic": {
+      "surface_model": "diffuse_mixed",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.2775,
+          "std": 0.1268,
+          "min": 0.0715,
+          "max": 0.4472,
+          "n_samples": 6
+        },
+        "linear_intensity_prior_0_255": 71,
+        "provenance_tier": "dry_sample_proxy",
+        "derivation": "mean_of_LUMA_SLUM_PVC_samples_at_903.9nm_used_as_plastic_proxy",
+        "sample_ids": [
+          "V001",
+          "V002",
+          "V003",
+          "V004",
+          "V005",
+          "V006"
+        ],
+        "confidence": "medium_low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.5,
+          "max": 1.2
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.2498,
+          "min": 0.1388,
+          "max": 0.333
+        },
+        "linear_intensity_prior_0_255": 64,
+        "mean_provenance_tier": "wet_literature_prior",
+        "interval_provenance_tier": "wet_engineering_interval",
+        "surface_response_type": "polymer_mixed",
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true,
+        "derivation": "First-order wet-surface mean prior near 900 nm. The mean multiplier is literature-level; minimum and maximum multipliers are engineering uncertainty bounds. Values are neither direct measurements for this UR-MAT class nor calibrated HDL-32E rain responses."
+      },
+      "warnings": [
+        "Colour, polymer family, finish and additives cause large variation.",
+        "A scalar multiplier is insufficient for smooth or specular surfaces. Incidence angle and water-film geometry may increase a return near the specular direction while reducing or removing returns elsewhere."
+      ]
+    },
+    "Gravel": {
+      "surface_model": "rough_diffuse",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.3997,
+          "std": 0.1,
+          "min": 0.2619,
+          "max": 0.5759,
+          "n_samples": 8
+        },
+        "linear_intensity_prior_0_255": 102,
+        "provenance_tier": "dry_sample_proxy",
+        "derivation": "LUMA_SLUM_granite_and_quartzite_proxy_at_903.9nm",
+        "sample_ids": [
+          "G001",
+          "G002",
+          "G003",
+          "G004",
+          "G005",
+          "X001",
+          "X002",
+          "X003"
+        ],
+        "confidence": "medium_low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.6,
+          "max": 1.0
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.3597,
+          "min": 0.2398,
+          "max": 0.3997
+        },
+        "linear_intensity_prior_0_255": 92,
+        "mean_provenance_tier": "wet_literature_prior",
+        "interval_provenance_tier": "wet_engineering_interval",
+        "surface_response_type": "rough_diffuse",
+        "confidence": "low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": true,
+        "derivation": "First-order wet-surface mean prior near 900 nm. The mean multiplier is literature-level; minimum and maximum multipliers are engineering uncertainty bounds. Values are neither direct measurements for this UR-MAT class nor calibrated HDL-32E rain responses."
+      }
+    },
+    "Unknown": {
+      "surface_model": "unknown",
+      "dry_state": {
+        "reflectance_903nm": {
+          "mean": 0.3,
+          "std": 0.2,
+          "min": 0.05,
+          "max": 0.7,
+          "n_samples": 0
+        },
+        "linear_intensity_prior_0_255": 77,
+        "provenance_tier": "fallback_excluded",
+        "derivation": "broad_fallback_prior",
+        "sample_ids": [],
+        "confidence": "very_low",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": false
+      },
+      "wet_surface_state": {
+        "reflectance_multiplier": {
+          "mean": 0.9,
+          "min": 0.5,
+          "max": 1.1
+        },
+        "reflectance_903nm_prior": {
+          "mean": 0.27,
+          "min": 0.15,
+          "max": 0.33
+        },
+        "linear_intensity_prior_0_255": 69,
+        "mean_provenance_tier": "fallback_excluded",
+        "interval_provenance_tier": "fallback_excluded",
+        "surface_response_type": "unknown",
+        "confidence": "excluded",
+        "measured_for_urmat_class": false,
+        "calibrated_sensor_response": false,
+        "quantitative_use": false,
+        "derivation": "Fallback wet state retained only for schema completeness and excluded from quantitative use."
+      },
+      "warnings": [
+        "Use only as fallback; replace with a mapped material whenever possible.",
+        "Unknown is a fallback class and must not be used in quantitative material-state evaluation."
+      ]
+    }
+  },
+  "measurement_wavelength_nm": 903.9,
+  "wavelength_note": "LUMA-SLUM values were read at 903.9 nm, the closest available sampled wavelength to the nominal 903 nm wavelength of the Velodyne HDL-32E.",
+  "state_model": {
+    "states": [
+      "dry",
+      "wet_surface"
+    ],
+    "dry_definition": "Dry-state reflectance priors at approximately 903 nm. Depending on the material, values are sample-backed, sample-proxy, engineering priors, or an excluded fallback.",
+    "wet_surface_definition": "First-order modification of the dry material prior caused by surface wetting only. Atmospheric rain, droplets, sensor-window wetting, false returns and dropout are outside this property layer.",
+    "wet_evidence_note": "Wet means are literature-level first-order priors. Wet uncertainty intervals are engineering bounds and are not direct class-specific measurements or sensor calibrations."
+  },
+  "runtime_equations": {
+    "wet_surface_only": "rho_wet_mean = rho_dry_mean * M_wet_mean; rho_wet_min = rho_dry_mean * M_wet_min; rho_wet_max = rho_dry_mean * M_wet_max.",
+    "excluded_runtime_effects": [
+      "incidence-angle dependence",
+      "range dependence",
+      "atmospheric rain attenuation",
+      "droplet backscatter",
+      "sensor-window wetting",
+      "false returns",
+      "rain-induced dropout",
+      "sensor-specific intensity calibration"
+    ]
+  },
+  "scope": {
+    "included": [
+      "dry spectral reflectance priors at approximately 903 nm",
+      "wet-surface mean reflectance multipliers",
+      "wet engineering uncertainty intervals",
+      "state-specific provenance tiers",
+      "material response type and modelling warnings"
+    ],
+    "excluded": [
+      "experiment-specific empirical intensity ratios",
+      "measured class-specific wet reflectance claims",
+      "calibrated HDL-32E rain responses",
+      "incidence-angle response",
+      "range response",
+      "atmospheric attenuation",
+      "rain-droplet backscatter",
+      "sensor-cover wetting",
+      "rain-induced false returns and dropout"
+    ]
+  },
+  "tier_definitions": {
+    "dry_sample_backed": "Dry value computed from samples explicitly assigned to the same UR-MAT material class.",
+    "dry_sample_proxy": "Dry value computed from measured samples of a related material used as an explicit proxy for the UR-MAT class.",
+    "dry_engineering_prior": "Dry value supplied as an engineering prior because suitable class-specific samples were not available.",
+    "wet_literature_prior": "Wet mean multiplier based on a first-order literature-level trend, not a direct measurement for the individual UR-MAT class.",
+    "wet_engineering_interval": "Wet minimum and maximum multipliers are engineering uncertainty bounds, not measured confidence intervals.",
+    "fallback_excluded": "Fallback retained for schema completeness but excluded from quantitative evaluation and calibrated simulation."
+  }
+}

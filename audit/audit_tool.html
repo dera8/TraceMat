@@ -1,0 +1,304 @@
+<title>Grounding audit</title>
+<meta charset="utf-8">
+<style>
+  :root{--bg:#faf9f7;--fg:#1c1b19;--muted:#6f6b64;--line:#e2ded7;
+        --ok:#1a7f43;--bad:#b3261e;--unk:#8a6d18;--warn:#b45309}
+  *{box-sizing:border-box}
+  body{font:16px/1.55 -apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--fg);margin:0}
+  header{padding:14px 24px;border-bottom:1px solid var(--line);display:flex;gap:18px;align-items:center}
+  .bar{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+  .bar>i{display:block;height:100%;background:var(--ok);width:0;transition:width .2s}
+  main{max-width:720px;margin:36px auto;padding:0 24px}
+  .q{font-size:15px;color:var(--muted);margin-bottom:6px}
+  h1{font-size:26px;margin:0 0 2px;line-height:1.25}
+  .sub{color:var(--muted);font-size:15px;margin-bottom:26px}
+  .hint{background:#fff;border:1px solid var(--line);border-left:4px solid var(--ok);
+        border-radius:8px;padding:16px 18px;font-size:17px;margin-bottom:8px}
+  .hint.warn{border-left-color:var(--warn);background:#fffbf2}
+  .hint b{font-variant-numeric:tabular-nums}
+  .btns{display:flex;gap:12px;margin:26px 0 14px}
+  .btns button{flex:1;font:600 17px inherit;padding:20px 8px;border-radius:12px;
+               border:2px solid var(--line);background:#fff;cursor:pointer}
+  .btns button:hover{transform:translateY(-1px)}
+  .b-c{border-color:#bfe3cd!important;color:var(--ok)}
+  .b-i{border-color:#f3c9c6!important;color:var(--bad)}
+  .b-u{border-color:#eddfb4!important;color:var(--unk)}
+  kbd{font:12px ui-monospace,monospace;background:#f0ede8;border:1px solid var(--line);
+      border-bottom-width:2px;border-radius:4px;padding:1px 6px;margin-left:6px}
+  .foot{display:flex;gap:14px;align-items:center;color:var(--muted);font-size:14px;flex-wrap:wrap}
+  .foot a{color:#1a5fb4;cursor:pointer}
+  input,select,textarea{font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;background:#fff}
+  #more{display:none;background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-top:14px;font-size:14px}
+  #more dl{display:grid;grid-template-columns:180px 1fr;gap:3px 12px;margin:0}
+  #more dt{color:var(--muted)} #more dd{margin:0;overflow-wrap:anywhere}
+  #drop{border:2px dashed var(--line);border-radius:14px;padding:70px 24px;text-align:center;color:var(--muted)}
+  .hide{display:none}
+  .done{text-align:center;padding:60px 0}
+</style>
+
+<header>
+  <strong>Audit</strong>
+  <span id="pos" style="color:var(--muted);font-size:14px"></span>
+  <div class="bar"><i id="prog"></i></div>
+  <select id="filter" title="cosa mostrare">
+    <option value="todo">da fare</option>
+    <option value="uncertain">rivedi le incerte</option>
+    <option value="incorrect">rivedi le sbagliate</option>
+    <option value="all">tutte</option>
+  </select>
+  <label title="ignora le etichette gia' nel CSV: per un secondo annotatore indipendente"
+         style="font-size:13px;color:var(--muted)">
+    <input type="checkbox" id="blind" style="width:auto"> cieco
+  </label>
+  <input id="annot" placeholder="il tuo nome" style="width:120px">
+  <button id="export">Esporta</button>
+</header>
+
+<main>
+  <div id="drop">
+    <p style="font-size:18px"><strong>Trascina qui <code>grounding_audit_labelsheet.csv</code></strong></p>
+    <p><input type="file" id="file" accept=".csv"></p>
+    <p>Niente lascia il browser. Il progresso si salva da solo.</p>
+  </div>
+  <div id="app" class="hide"></div>
+</main>
+
+<script>
+// Un secondo annotatore deve lavorare senza vedere il primo, e senza
+// sovrascriverne il salvataggio locale.
+const blind=()=>document.getElementById("blind").checked;
+const KEY=()=>blind()?"grounding_audit_blind":"grounding_audit_v1";
+let rows=[],cols=[],order=[],idx=0,hist=[],shownAt=0;
+
+/* ---------------- CSV ---------------- */
+function parseCSV(t){
+  const out=[];let row=[],f="",q=false;
+  t=t.replace(/^﻿/,"").replace(/\r\n/g,"\n").replace(/\r/g,"\n");
+  for(let i=0;i<t.length;i++){const c=t[i];
+    if(q){ if(c==='"'){ if(t[i+1]==='"'){f+='"';i++;} else q=false; } else f+=c; }
+    else if(c==='"')q=true;
+    else if(c===","){row.push(f);f="";}
+    else if(c==="\n"){row.push(f);out.push(row);row=[];f="";}
+    else f+=c;}
+  if(f.length||row.length){row.push(f);out.push(row);}
+  return out.filter(r=>r.length>1||r[0]!=="");
+}
+const escCSV=v=>/[",\n]/.test(v??"")?'"'+String(v).replace(/"/g,'""')+'"':(v??"");
+const toCSV=()=>[cols.join(",")].concat(rows.map(r=>cols.map(c=>escCSV(r[c])).join(","))).join("\n")+"\n";
+
+/* ------------- l'aiuto: una riga sola, calcolata ------------- */
+function hint(r){
+  const alt1=(r.nearest_alt_1||"").match(/@\s*([\d.]+)\s*m/);
+  const altD=alt1?parseFloat(alt1[1]):null;
+  const d=parseFloat(r.dist_to_assigned_m||"NaN");
+  const rank=r.rank_same_type||r.assigned_parent_rank;
+
+  if(r.grounding_status==="unresolved")
+    return {q:"Lasciarla senza parent era giusto?",
+            t:altD!=null?`Nessun parent assegnato. L'entità più vicina è a <b>${altD} m</b>.`
+                        :"Nessun parent assegnato, e nessun candidato con geometria utile.",
+            w:altD!=null&&altD<2};
+
+  if(r.surface==="road"){
+    const p=(r.assigned_parent_osm_id||"").toLowerCase().trim();
+    const m=(r.source_mesh_name||"").toLowerCase();
+    const ok=p&&m.includes(p);
+    return {q:"Questa strada appartiene a questa via?",
+            t:ok?`Il nome della mesh contiene <b>«${r.assigned_parent_osm_id}»</b>, che è il parent. Per le strade distanza e rank non contano.`
+                :`Il nome della mesh <b>non</b> contiene «${r.assigned_parent_osm_id}». Controlla.`,
+            w:!ok};
+  }
+
+  const ids=(r.source_mesh_name||"").match(/\d{4,}/g)||[];
+  if(ids.includes((r.assigned_parent_osm_id||"").trim()))
+    return {q:"Questa superficie appartiene a questo edificio?",
+            t:`Il nome della mesh contiene <b>${r.assigned_parent_osm_id}</b>, che è esattamente il parent.`,
+            w:false};
+
+  if(!isNaN(d)&&altD!=null){
+    const ratio=altD/d;
+    if(rank==="1"&&ratio>=5)
+      return {q:"Questa superficie appartiene a questo edificio?",
+              t:`Parent a <b>${d} m</b>, alternativa più vicina a <b>${altD} m</b> — <b>${ratio.toFixed(0)}×</b> più lontana. Nessuna ambiguità.`,
+              w:false};
+    if(rank!=="1")
+      return {q:"Questa superficie appartiene a questo edificio?",
+              t:`Il parent <b>non</b> è il più vicino: è al posto <b>${rank}</b>. Più vicina: <b>${r.nearest_alt_1}</b>. Guarda l'alternativa.`,
+              w:true};
+    return {q:"Questa superficie appartiene a questo edificio?",
+            t:`Parent a <b>${d} m</b>, alternativa a <b>${altD} m</b> — solo <b>${ratio.toFixed(1)}×</b>. Margine stretto.`,
+            w:true};
+  }
+  return {q:"Questa superficie appartiene a questo edificio?",
+          t:"Nessuna geometria utilizzabile: giudica dal nome della mesh, o dal viewer.",w:true};
+}
+
+/* -------- il motivo, dedotto: modificabile ma non obbligatorio -------- */
+function autoReason(r,label){
+  if(label==="uncertain") return "insufficient_geometry";
+  if(r.grounding_status==="unresolved") return label==="correct"?"abstention_justified":"missed_parent";
+  if(label==="incorrect") return "wrong_entity_proximity";
+  const ids=(r.source_mesh_name||"").match(/\d{4,}/g)||[];
+  if(ids.includes((r.assigned_parent_osm_id||"").trim())) return "id_match";
+  if(r.surface==="road") return "id_match";
+  return "geometry_consistent";
+}
+const ALL_REASONS=["id_match","geometry_consistent","viewer_confirmed","abstention_justified",
+  "wrong_entity_name_collision","wrong_entity_proximity","parent_not_an_entity","missed_parent",
+  "component_spans_entities","insufficient_geometry","ambiguous_source_name","needs_external_source"];
+
+/* ---------------- storage ---------------- */
+function save(){
+  const d={};rows.forEach(r=>{if(r.audit_label)d[r.audit_id]={
+    l:r.audit_label,r:r.audit_reason,n:r.notes,m:r.reason_manual,s:r.seconds_spent};});
+  try{localStorage.setItem(KEY(),JSON.stringify(d));
+      localStorage.setItem(KEY()+"_annot",document.getElementById("annot").value);}catch(e){}
+}
+function restore(){
+  let d={};try{d=JSON.parse(localStorage.getItem(KEY())||"{}");}catch(e){}
+  rows.forEach(r=>{const s=d[r.audit_id];if(s){
+    r.audit_label=s.l;r.audit_reason=s.r||"";r.notes=s.n||"";
+    r.reason_manual=s.m||"";r.seconds_spent=s.s||"";}});
+  try{document.getElementById("annot").value=localStorage.getItem(KEY()+"_annot")||"";}catch(e){}
+}
+
+/* ------ ordine: prima le veloci, per prendere ritmo ------ */
+function speed(r){
+  if(r.grounding_status==="unresolved") return 3;
+  const ids=(r.source_mesh_name||"").match(/\d{4,}/g)||[];
+  if(ids.includes((r.assigned_parent_osm_id||"").trim())) return 0;
+  if(r.surface==="road") return 1;
+  return r.prechecked_anomaly?4:2;
+}
+
+/* ---------------- render ---------------- */
+const esc=s=>String(s??"").replace(/[<>&]/g,c=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[c]));
+function inView(r){
+  const f=document.getElementById("filter").value;
+  if(f==="all") return true;
+  if(f==="todo") return !r.audit_label;
+  return r.audit_label===f;                 // uncertain | incorrect
+}
+function render(){
+  const app=document.getElementById("app");
+  const view=order.filter(i=>inView(rows[i]));
+  if(!view.length){
+    const f=document.getElementById("filter").value;
+    app.innerHTML=`<div class="done"><h1>${f==="todo"?"Finito.":"Niente qui."}</h1>
+      <p class="sub">${f==="todo"
+        ? rows.filter(r=>r.audit_label).length+" righe etichettate. Premi Esporta e passa lo scorer."
+        : "Nessuna riga in questa vista. Cambia filtro."}</p></div>`;
+    tally();return;
+  }
+  if(!view.includes(order[idx])) idx=order.indexOf(view[0]);
+  const r=rows[order[idx]],h=hint(r);
+  shownAt=Date.now();
+  app.innerHTML=`
+    <div class="q">${h.q}</div>
+    <h1>${esc(r.source_mesh_name)}</h1>
+    <div class="sub">${esc(r.surface)} &middot; ${esc(r.material_class)} &middot; ${esc(r.scene)}
+      ${r.assigned_parent_osm_id?` &rarr; <strong>${esc(r.assigned_parent_osm_id)}</strong>`:""}
+      ${r.prechecked_anomaly?' &middot; <span style="color:var(--warn)">metadati anomali</span>':""}</div>
+    <div class="hint ${h.w?"warn":""}">${h.t}</div>
+    <div class="btns">
+      <button class="b-c" data-l="correct">Corretto<kbd>C</kbd></button>
+      <button class="b-i" data-l="incorrect">Sbagliato<kbd>I</kbd></button>
+      <button class="b-u" data-l="uncertain">Incerto<kbd>U</kbd></button>
+    </div>
+    <div class="foot">
+      <span id="tally"></span>
+      <a id="toggle">dettagli</a>
+      ${r.viewer_url?`<a href="${esc(r.viewer_url)}" target="_blank">viewer &rarr;</a>`:""}
+      ${hist.length?'<a id="undo">annulla ultima <kbd>Z</kbd></a>':""}
+    </div>
+    <div id="more">
+      <dl>
+        <dt>evidenza registrata</dt><dd>${esc(r.evidence_summary)}</dd>
+        <dt>tier / confidence</dt><dd>${esc(r.canonical_evidence_tier)} &middot; ${esc(r.confidence)}</dd>
+        <dt>distanza / rank</dt><dd>${r.dist_to_assigned_m?`${esc(r.dist_to_assigned_m)} m &middot; ${esc(r.rank_same_type||r.assigned_parent_rank||"?")} su ${esc(r.n_candidates_same_type||"?")}`:"–"}</dd>
+        <dt>alternative</dt><dd>${["nearest_alt_1","nearest_alt_2","nearest_alt_3"].map(k=>r[k]).filter(Boolean).map(esc).join("<br>")||"–"}</dd>
+      </dl>
+      <p style="margin:12px 0 0">motivo:
+        <select id="reason">${ALL_REASONS.map(v=>`<option ${v===r.audit_reason?"selected":""}>${v}</option>`).join("")}</select>
+        <input id="notes" placeholder="note" value="${esc(r.notes||"")}" style="width:260px">
+      </p>
+    </div>`;
+
+  app.querySelectorAll("button[data-l]").forEach(b=>b.onclick=()=>label(b.dataset.l));
+  document.getElementById("toggle").onclick=()=>{const m=document.getElementById("more");
+    m.style.display=m.style.display==="block"?"none":"block";};
+  const u=document.getElementById("undo"); if(u) u.onclick=undo;
+  document.getElementById("reason").onchange=e=>{
+    r.audit_reason=e.target.value; r.reason_manual="yes"; save();};
+  document.getElementById("notes").oninput=e=>{r.notes=e.target.value;save();};
+  tally();
+}
+function tally(){
+  const done=rows.filter(r=>r.audit_label).length;
+  const el=document.getElementById("tally");
+  if(el) el.textContent=`${done} di ${rows.length}`;
+  document.getElementById("pos").textContent=`${rows.length-done} da fare`;
+  document.getElementById("prog").style.width=(100*done/rows.length)+"%";
+}
+function label(l){
+  const r=rows[order[idx]];
+  hist.push({id:r.audit_id,prev:r.audit_label,reason:r.audit_reason,man:r.reason_manual});
+  r.audit_label=l;
+  // Il motivo e' dedotto, non scelto: lo marchiamo come tale, cosi' a valle si
+  // distingue un giudizio umano da un'inferenza dello strumento.
+  if(!r.reason_manual){ r.audit_reason=autoReason(r,l); }
+  r.annotator=document.getElementById("annot").value;
+  if(shownAt) r.seconds_spent=((Date.now()-shownAt)/1000).toFixed(1);
+  save();
+  const view=order.filter(i=>inView(rows[i]));
+  const pos=view.indexOf(order[idx]);
+  idx = pos>=0 && pos+1<view.length ? order.indexOf(view[pos+1]) : idx+1;
+  render();
+}
+function undo(){
+  const h=hist.pop(); if(!h) return;
+  const r=rows.find(x=>x.audit_id===h.id);
+  r.audit_label=h.prev||""; r.audit_reason=h.reason||""; r.reason_manual=h.man||"";
+  save(); idx=order.indexOf(rows.indexOf(r)); render();
+}
+document.addEventListener("keydown",e=>{
+  if(/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)||!rows.length)return;
+  const k=e.key.toLowerCase();
+  if(k==="c")label("correct"); else if(k==="i")label("incorrect");
+  else if(k==="u")label("uncertain"); else if(k==="z")undo(); else return;
+  e.preventDefault();
+});
+document.getElementById("export").onclick=()=>{
+  if(!rows.length)return;
+  const a=document.getElementById("annot").value;
+  rows.forEach(r=>{if(r.audit_label&&!r.annotator)r.annotator=a;});
+  const url=URL.createObjectURL(new Blob([toCSV()],{type:"text/csv;charset=utf-8"}));
+  const el=document.createElement("a");el.href=url;el.download="grounding_audit_labelsheet.csv";el.click();
+  URL.revokeObjectURL(url);
+};
+function load(text){
+  const t=parseCSV(text); cols=t[0];
+  rows=t.slice(1).map(r=>Object.fromEntries(cols.map((c,i)=>[c,r[i]??""])));
+  ["audit_label","audit_reason","annotator","notes","reason_manual","seconds_spent"].forEach(c=>{
+    if(!cols.includes(c)){cols.push(c);rows.forEach(r=>r[c]="");}});
+  // Modalita' cieca: un secondo annotatore non deve vedere le etichette del primo.
+  if(blind()) rows.forEach(r=>{r.audit_label="";r.audit_reason="";r.notes="";
+                               r.annotator="";r.reason_manual="";r.seconds_spent="";});
+  restore();
+  order=rows.map((_,i)=>i).sort((a,b)=>speed(rows[a])-speed(rows[b]));
+  idx=0;
+  document.getElementById("drop").classList.add("hide");
+  document.getElementById("app").classList.remove("hide");
+  render();
+}
+document.getElementById("filter").onchange=()=>{idx=0;render();};
+document.getElementById("file").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const rd=new FileReader();rd.onload=()=>load(rd.result);rd.readAsText(f);};
+const drop=document.getElementById("drop");
+drop.ondragover=e=>{e.preventDefault();drop.style.background="#f2f0ec";};
+drop.ondragleave=()=>drop.style.background="";
+drop.ondrop=e=>{e.preventDefault();drop.style.background="";
+  const f=e.dataTransfer.files[0];if(!f)return;
+  const rd=new FileReader();rd.onload=()=>load(rd.result);rd.readAsText(f);};
+</script>
