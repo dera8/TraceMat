@@ -194,7 +194,7 @@ def build_scene(scene, source=None, timestamp=None):
     input_files=[Path(source)]
     if match_path and match_path.exists(): input_files.append(match_path)
     meta={'scene':scene,'generation_timestamp':ts,'generator_version':VERSION,
-      'source_files':[str(p.relative_to(ROOT)) for p in input_files],
+      'source_files':[p.relative_to(ROOT).as_posix() for p in input_files],
       'source_file_sha256':[hashlib.sha256(p.read_bytes()).hexdigest() for p in input_files],
       'node_counts':dict(kinds),'edge_counts':dict(rels),
       'grounding_rule_counts':dict(rules),'unresolved_count':unresolved,

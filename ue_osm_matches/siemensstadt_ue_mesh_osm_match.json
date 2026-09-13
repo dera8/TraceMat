@@ -1,8 +1,8 @@
 {
   "summary": {
     "scene": "siemensstadt",
-    "ue_glb": "C:\\Users\\Debora\\Desktop\\glb\\Siemenstaddt_ue.glb",
-    "source_bounds": "C:\\Users\\Debora\\Desktop\\glb\\siemensstadt_blend_object_bounds.json",
+    "ue_glb": "Siemenstaddt_ue.glb",
+    "source_bounds": "siemensstadt_blend_object_bounds.json",
     "ue_meshes": 588,
     "matched_by_exact_mesh_name": 369,
     "matched_by_mesh_number": 0,

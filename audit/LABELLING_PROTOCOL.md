@@ -1,23 +1,19 @@
 # Grounding audit — labelling protocol
 
-Input: `results_v2/grounding_audit_labelsheet.csv` (150 rows, stratified by scene,
+Input: `audit/grounding_audit_labelled.csv` (150 rows, stratified by scene,
 evidence tier and surface type). Fill four columns: `audit_label`, `audit_reason`,
 `annotator`, `notes`. Everything else is read-only context.
 
 Score with:
 
 ```bash
-python scripts/score_grounding_audit_v2.py --input results_v2/grounding_audit_labelsheet.csv
+python audit/score_audit.py --input audit/grounding_audit_labelled.csv
 ```
 
 Blank and `uncertain` never count as correct, so an unfinished sheet understates
 precision rather than inflating it.
 
-To open the `viewer_url` links, serve the repository root first:
-
-```bash
-python -m http.server 8000
-```
+The anonymous review copy omits legacy workstation `viewer_url` links. The labelled CSV and all scoring fields remain available. Start the bundled Maradona viewer with `python start_review.py`; full 3D assets for the other scenes are not part of this compact package.
 
 ---
 

@@ -1,4 +1,4 @@
-﻿/* Public demo: canonical query selection, browser execution, no model service. */
+/* Public demo: canonical query selection, browser execution, no model service. */
 (() => {
  const entries=[
   {id:'brick',question:'Which surfaces are brick?',query:{op:'filter',material_class:'brick'}},
@@ -16,7 +16,7 @@
  const heading=document.createElement('label');heading.textContent='Try a controlled query';heading.htmlFor='controlledQuery';heading.style.cssText='align-self:flex-start;font-weight:600;font-size:16px';panel.prepend(heading);
  const pick=document.createElement('select');pick.id='controlledQuery';pick.style.cssText='min-width:0;flex:1;width:100%;font-size:15px;padding:9px;border:1px solid #c7d0d8;border-radius:8px;background:white;color:#1b242c';
  entries.forEach(e=>pick.add(new Option(e.question,e.id)));bar.prepend(pick);
- const note=document.createElement('div');note.textContent='The public demo executes frozen typed queries. LLM-based compilation is available in the local reproducibility package.';note.style.cssText='font-size:13px;line-height:1.4;color:#46525c;background:#fff;padding:6px 8px;border-radius:6px';panel.appendChild(note);
+ const note=document.createElement('div');note.textContent='This review demo executes frozen typed queries locally. No account, model service or internet connection is required.';note.style.cssText='font-size:13px;line-height:1.4;color:#46525c;background:#fff;padding:6px 8px;border-radius:6px';panel.appendChild(note);
  window.nlqDirectQuery=question=>{
   const e=entries.find(x=>x.question===question);
   return e?{think:'Frozen typed query, executed over the published graph.',query:structuredClone(e.query)}:null;
@@ -37,6 +37,11 @@
  // Load the graph at startup; the large radio/LiDAR overlays remain deferred.
  loadNlqGraph().catch(()=>{note.textContent='The graph could not be loaded. Reload the page to retry.';});
  fetch('assets/frozen_queries.json').then(r=>{if(!r.ok)throw new Error('Query list unavailable');return r.json();}).then(data=>{
-  for(const q of data.questions||[]){const entry={...q,id:'benchmark-'+q.id};entries.push(entry);pick.add(new Option(q.id+' · '+q.question,entry.id));}
+  for(const q of data.questions||[]){
+   // The complete frozen benchmark also contains Python-only operations.
+   try{nlqValidateQuery(q.query);}catch(error){continue;}
+   const entry={...q,id:'benchmark-'+q.id};entries.push(entry);pick.add(new Option(q.id+' - '+q.question,entry.id));
+  }
+  const full=document.createElement('a');full.href='assets/frozen_queries.json';full.textContent='Full benchmark query set (including Python-only operations)';full.style.cssText='display:block;font-size:12px;margin-top:4px';note.appendChild(full);
  }).catch(()=>{});
 })();

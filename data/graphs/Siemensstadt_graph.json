@@ -6,12 +6,12 @@
     "generation_timestamp": "2026-07-28T01:46:41.528158+00:00",
     "generator_version": "2.0.0",
     "source_files": [
-      "source_graphs\\Siemensstadt_source.json",
-      "ue_osm_matches\\siemensstadt_ue_mesh_osm_match.json"
+      "source_graphs/Siemensstadt_source.json",
+      "ue_osm_matches/siemensstadt_ue_mesh_osm_match.json"
     ],
     "source_file_sha256": [
       "de722c15ccb925bd264306064843fa3d9e24bc344fb8558e1e07da0e2eda1aed",
-      "edcba1a14377b9cf19ae92a7979ebf3d12c6c5e9eca5233b6d8fb46f0ecd66a7"
+      "a444abf250cb596658628a04113ab8b927930b1b2249abaf21dfa79532e32fdd"
     ],
     "node_counts": {
       "surface": 587,

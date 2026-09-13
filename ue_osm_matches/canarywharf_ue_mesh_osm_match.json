@@ -1,8 +1,8 @@
 {
   "summary": {
     "scene": "canarywharf",
-    "ue_glb": "C:\\Users\\Debora\\Desktop\\glb\\canarywharf_ue.glb",
-    "source_bounds": "C:\\Users\\Debora\\Desktop\\glb\\canaryosm2world_blend_object_bounds.json",
+    "ue_glb": "canarywharf_ue.glb",
+    "source_bounds": "canaryosm2world_blend_object_bounds.json",
     "ue_meshes": 7571,
     "matched_by_exact_mesh_name": 0,
     "matched_by_mesh_number": 2511,

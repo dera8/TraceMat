@@ -1,0 +1,31 @@
+{
+  "graph_validation": "passed: all 3 scenes",
+  "input_fingerprints": "passed",
+  "in_memory_rebuild": "passed: all 3 scenes",
+  "scientific_nodes_and_edges": "identical to research snapshot",
+  "coverage": {
+    "grounded": 3717,
+    "in_scope": 3918,
+    "percent": 94.9
+  },
+  "audit": {
+    "correct": 126,
+    "settled": 133,
+    "uncertain": 17,
+    "precision_percent": 94.7
+  },
+  "browser_queries": "21 selectable queries executed without runtime errors",
+  "responsive_layout_widths_px": [
+    1440,
+    1024,
+    600
+  ],
+  "external_demo_requests": 0,
+  "model": {
+    "loaded_entities": 337,
+    "loaded_meshes": 418,
+    "radio_index_entries": 864
+  },
+  "rendering_check": "Model loading/material application verified; continuous software rendering disabled in automated model check.",
+  "anonymization": "Known author identifiers, personal paths and author-account links absent from distributed project content. Git history, workflows, bytecode and caches excluded. Third-party attribution retained."
+}

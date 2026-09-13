@@ -1,7 +1,7 @@
 {
   "summary": {
     "scene": "maradona",
-    "ue_glb": "C:\\Users\\Debora\\Desktop\\glb\\maradona_ue.glb",
+    "ue_glb": "maradona_ue.glb",
     "source_bounds": "",
     "ue_meshes": 454,
     "matched_by_exact_mesh_name": 0,
