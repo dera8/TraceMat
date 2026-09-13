@@ -75,7 +75,3 @@ The labelled CSV is also readable with audit/audit_tool.html (load the CSV into 
 - `docs/`: query schema and anonymization notes.
 
 Full-resolution geometry for all scenes, model weights, and the complete experiment environment are outside this compact review package. The complete benchmark JSON retains Python-only operations such as `grid`; these are not offered as executable browser queries. The optional Python query/LLM utilities in src/ have separate dependencies; they are not needed for the browser demo or verify_review.py. Radio views expose material parameters, not simulated coverage fields. LiDAR views expose material-level reflectance priors, not calibrated sensor returns.
-
-## Anonymous review snapshot
-
-Personal workstation paths and repository-owner links have been removed. The ZIP contains no Git history, credentials, deployment workflows or Python bytecode. Source filenames in graph metadata use portable paths, and input fingerprints have been recomputed after anonymizing descriptive input headers. Scientific nodes, edges and properties are unchanged. See [anonymization notes](docs/reviewer-anonymization.md). Third-party library attribution is preserved.
