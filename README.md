@@ -1,10 +1,19 @@
-# TraceMat ? anonymous reviewer artifact
+# TraceMat - reviewer repository
 
-This package supports inspection of the material-grounded urban graph, its evidence, and the radio/LiDAR property layers. It includes the interactive Maradona scene and the authoritative graphs for all three evaluated scenes.
+Code, data and an offline interactive demo for reviewing the material-grounded urban graph, its evidence, and the radio/LiDAR property layers. The interactive scene is Maradona; the recorded graphs and reconstruction checks cover all three evaluated scenes.
+
+## Start here
+
+- **Inspect the method and data:** [query schema](docs/query_schema.md), [graphs](data/graphs/), [graph construction code](src/build_scene_graphs.py).
+- **Review the evidence:** [labelled audit sample](audit/grounding_audit_labelled.csv), [audit protocol](audit/LABELLING_PROTOCOL.md), [reported metrics](results/grounding_audit_metrics.json).
+- **Run the demo:** follow the instructions below; a five-minute walkthrough and expected query results are included.
+- **Verify the artifact:** run `python verify_review.py --rebuild`; see [recorded checks](REVIEW_CHECKS.json).
+
+The files can be inspected directly through the review repository. To interact with the 3D scene, download the complete repository snapshot and run it locally: a repository's source-code preview does not execute the viewer.
 
 ## Start the demo
 
-1. Extract the complete ZIP into a folder. Do not open HTML inside the ZIP.
+1. Download the complete repository snapshot from the review link and extract it into a folder. Keep its directory structure intact; do not open HTML inside a ZIP.
 2. Open a terminal in that folder and run:
 
    ```bash
@@ -67,6 +76,6 @@ The labelled CSV is also readable with audit/audit_tool.html (load the CSV into 
 
 Full-resolution geometry for all scenes, model weights, and the complete experiment environment are outside this compact review package. The complete benchmark JSON retains Python-only operations such as `grid`; these are not offered as executable browser queries. The optional Python query/LLM utilities in src/ have separate dependencies; they are not needed for the browser demo or verify_review.py. Radio views expose material parameters, not simulated coverage fields. LiDAR views expose material-level reflectance priors, not calibrated sensor returns.
 
-## Anonymous snapshot
+## Anonymous review snapshot
 
 Personal workstation paths and repository-owner links have been removed. The ZIP contains no Git history, credentials, deployment workflows or Python bytecode. Source filenames in graph metadata use portable paths, and input fingerprints have been recomputed after anonymizing descriptive input headers. Scientific nodes, edges and properties are unchanged. See [anonymization notes](docs/reviewer-anonymization.md). Third-party library attribution is preserved.
