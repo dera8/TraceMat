@@ -1,7 +1,7 @@
 {
   ".gitattributes": "c186c12eeec6c647f48749fe312af5e7caf373ebea66921a99214386babad48d",
   ".gitignore": "7ca8efb921cd9f5688d3cee6d8312f635fdbb53e4819fa265408181a71e5431e",
-  "README.md": "81091626662c802383e6a17eaa538db502968fd09ef37173f6472211fe88e169",
+  "README.md": "6f41254ac9174de7a583464327cf3d5243d5a0f858ad44b5ce4c2987270f8aa8",
   "REVIEW_CHECKS.json": "fcde793f6b4ea5df1d6255d8265c1cfd9b8633f2067a6077dc09da75da59b631",
   "audit/LABELLING_PROTOCOL.md": "a068fd06619c20435a842596230af153921652cc7e7307125c9ad88f98856bb7",
   "audit/audit_tool.html": "6409839c24ce0cfea307186888010a656dc8ccf5e2b387435a07d2f9ee117cd5",
@@ -12,7 +12,7 @@
   "data/graphs/Siemensstadt_graph.json": "453e1ea1e2d18e30f0d4b9f521ef7d0fe101f85a07e3a8b47c066fe5705ad45c",
   "data/properties/lidar_reflectance_903nm.json": "b8dffeffb28a547ab5ca692b4559bd08576bcb55e6f0e36c58c2c8a1b9c8acbd",
   "docs/query_schema.md": "907c6125db7544ea55a9160e9ecef8529d09071a2d773c460ca375e973bdf73d",
-  "docs/reviewer-anonymization.md": "359e96f7ee12bdc3b5fef20900108bb72d32867daba7d9caf17b31ce670304e6",
+  "index.html": "a6c4102c24b6544782a892e6acf4a2061562c74854456cd51420d4c68351b490",
   "results/grounding_audit_metrics.json": "031bd66acbcc4c5b3218112740460aebe079c15ea3671e61eca4abaed5e714ac",
   "source_graphs/CanaryWharf_source.json": "c0d01ca790b9ccc5ada42346946adb1b332a77a618c5cc1c3e559e21cfcd36ee",
   "source_graphs/Maradona_source.json": "23b9d795737428677d2e4fe1d181a2ac634d8d5744e8604a1b15c5de89bde022",
