@@ -1,4 +1,4 @@
-# TraceMat - reviewer repository
+# TraceMat
 
 Code, data and an offline interactive demo for reviewing the material-grounded urban graph, its evidence, and the radio/LiDAR property layers. The interactive scene is Maradona; the recorded graphs and reconstruction checks cover all three evaluated scenes.
 
