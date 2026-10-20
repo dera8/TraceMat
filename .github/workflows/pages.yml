@@ -26,7 +26,7 @@ jobs:
       - name: Package browser demo
         run: |
           mkdir -p _site
-          cp index.html README.md LICENSE _site/
+          cp index.html README.md _site/
           cp -R viewer data docs audit results src source_graphs ue_osm_matches tools _site/
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v4
