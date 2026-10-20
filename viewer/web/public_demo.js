@@ -16,7 +16,7 @@
  const heading=document.createElement('label');heading.textContent='Try a controlled query';heading.htmlFor='controlledQuery';heading.style.cssText='align-self:flex-start;font-weight:600;font-size:16px';panel.prepend(heading);
  const pick=document.createElement('select');pick.id='controlledQuery';pick.style.cssText='min-width:0;flex:1;width:100%;font-size:15px;padding:9px;border:1px solid #c7d0d8;border-radius:8px;background:white;color:#1b242c';
  entries.forEach(e=>pick.add(new Option(e.question,e.id)));bar.prepend(pick);
- const note=document.createElement('div');note.textContent='This review demo executes frozen typed queries locally. No account, model service or internet connection is required.';note.style.cssText='font-size:13px;line-height:1.4;color:#46525c;background:#fff;padding:6px 8px;border-radius:6px';panel.appendChild(note);
+ const note=document.createElement('div');note.textContent='Queries run over the published graph in your browser. No account, installation or model service is required.';note.style.cssText='font-size:13px;line-height:1.4;color:#46525c;background:#fff;padding:6px 8px;border-radius:6px';panel.appendChild(note);
  window.nlqDirectQuery=question=>{
   const e=entries.find(x=>x.question===question);
   return e?{think:'Frozen typed query, executed over the published graph.',query:structuredClone(e.query)}:null;

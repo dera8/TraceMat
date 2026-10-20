@@ -1,7 +1,8 @@
 {
   ".gitattributes": "c186c12eeec6c647f48749fe312af5e7caf373ebea66921a99214386babad48d",
+  ".github/workflows/pages.yml": "901fd978fbb4106267e9a4c8e16ce35c944c98e668f73b3908e94ddcb5ca196e",
   ".gitignore": "7ca8efb921cd9f5688d3cee6d8312f635fdbb53e4819fa265408181a71e5431e",
-  "README.md": "6f41254ac9174de7a583464327cf3d5243d5a0f858ad44b5ce4c2987270f8aa8",
+  "README.md": "82974a8b46678ffc35959ca11f62c2a18e2c6a470c80343c1a73b940d0b1ddcc",
   "REVIEW_CHECKS.json": "fcde793f6b4ea5df1d6255d8265c1cfd9b8633f2067a6077dc09da75da59b631",
   "audit/LABELLING_PROTOCOL.md": "a068fd06619c20435a842596230af153921652cc7e7307125c9ad88f98856bb7",
   "audit/audit_tool.html": "6409839c24ce0cfea307186888010a656dc8ccf5e2b387435a07d2f9ee117cd5",
@@ -12,7 +13,7 @@
   "data/graphs/Siemensstadt_graph.json": "453e1ea1e2d18e30f0d4b9f521ef7d0fe101f85a07e3a8b47c066fe5705ad45c",
   "data/properties/lidar_reflectance_903nm.json": "b8dffeffb28a547ab5ca692b4559bd08576bcb55e6f0e36c58c2c8a1b9c8acbd",
   "docs/query_schema.md": "907c6125db7544ea55a9160e9ecef8529d09071a2d773c460ca375e973bdf73d",
-  "index.html": "a6c4102c24b6544782a892e6acf4a2061562c74854456cd51420d4c68351b490",
+  "index.html": "37cf30e6a2936e25352d77e7e46fe49fad11e443be249582cf9ad8ad9886859a",
   "results/grounding_audit_metrics.json": "031bd66acbcc4c5b3218112740460aebe079c15ea3671e61eca4abaed5e714ac",
   "source_graphs/CanaryWharf_source.json": "c0d01ca790b9ccc5ada42346946adb1b332a77a618c5cc1c3e559e21cfcd36ee",
   "source_graphs/Maradona_source.json": "23b9d795737428677d2e4fe1d181a2ac634d8d5744e8604a1b15c5de89bde022",
@@ -43,6 +44,6 @@
   "viewer/vendor/three-r128/OrbitControls.js": "02bb4ade710f3e607329e37a21f098bc3ac70eb6e33daf8a65e79f4db785e7b2",
   "viewer/vendor/three-r128/three.min.js": "9274bbcec8d96168626c732b5d31c775aa8cfb7eaa0599bec0c175908a2c1ce2",
   "viewer/web/frozen_queries.js": "2df37a1476c582ddaa9fd1577c48873b93947a9732333166955a56de025634eb",
-  "viewer/web/public_demo.js": "47e1cf79e81d753014ee1c072f0387a0a8696dac28385e646671c59988f2e612",
+  "viewer/web/public_demo.js": "4b5141d14ddf135cc877cba3408b710fdd212fbd317dce3f5a8ef1ac833d5ca5",
   "viewer/web/query_engine.js": "a76e9091449908d3d522445a993a749d45f9034425dab1c12eb05d1329dbb597"
 }

@@ -1,17 +1,17 @@
 # TraceMat
 
-Code, data and an offline interactive demo for reviewing the material-grounded urban graph, its evidence, and the radio/LiDAR property layers. The interactive scene is Maradona; the recorded graphs and reconstruction checks cover all three evaluated scenes.
+Code, data and a browser-based interactive demo for reviewing the material-grounded urban graph, its evidence, and the radio/LiDAR property layers. The interactive scene is Maradona; the recorded graphs and reconstruction checks cover all three evaluated scenes.
 
 ## Start here
 
 - **Inspect the method and data:** [query schema](docs/query_schema.md), [graphs](data/graphs/), [graph construction code](src/build_scene_graphs.py).
 - **Review the evidence:** [labelled audit sample](audit/grounding_audit_labelled.csv), [audit protocol](audit/LABELLING_PROTOCOL.md), [reported metrics](results/grounding_audit_metrics.json).
-- **Run the demo:** follow the instructions below; a five-minute walkthrough and expected query results are included.
+- **Try it online:** [Launch TraceMat](https://dera8.github.io/TraceMat/) — no download or installation. A five-minute walkthrough and expected query results are included below.
 - **Verify the artifact:** run `python verify_review.py --rebuild`; see [recorded checks](REVIEW_CHECKS.json).
 
-The files can be inspected directly through the review repository. To interact with the 3D scene, download the complete repository snapshot and run it locally: a repository's source-code preview does not execute the viewer.
+Open **https://dera8.github.io/TraceMat/** and choose **Launch interactive demo**. The scene, graph, material layers and controlled queries run in your browser. You need an internet connection to load the site and a modern browser with WebGL; no Python, account, API key or Ollama service is required. The interactive scene is Maradona.
 
-## Start the demo
+## Run locally (optional)
 
 1. Download the complete repository snapshot from the review link and extract it into a folder. Keep its directory structure intact; do not open HTML inside a ZIP.
 2. Open a terminal in that folder and run:
@@ -75,3 +75,7 @@ The labelled CSV is also readable with audit/audit_tool.html (load the CSV into 
 - `docs/`: query schema and anonymization notes.
 
 Full-resolution geometry for all scenes, model weights, and the complete experiment environment are outside this compact review package. The complete benchmark JSON retains Python-only operations such as `grid`; these are not offered as executable browser queries. The optional Python query/LLM utilities in src/ have separate dependencies; they are not needed for the browser demo or verify_review.py. Radio views expose material parameters, not simulated coverage fields. LiDAR views expose material-level reflectance priors, not calibrated sensor returns.
+
+## GitHub Pages deployment
+
+In **Settings → Pages → Build and deployment**, select **GitHub Actions** as the source. The workflow in `.github/workflows/pages.yml` deploys the site on every push to `main`; it can also be run manually from the Actions tab. The published address is https://dera8.github.io/TraceMat/. All browser asset paths are relative so the repository subpath works.
