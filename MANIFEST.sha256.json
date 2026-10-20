@@ -38,12 +38,14 @@
   "viewer/assets/maradona_demo.glb": "c08bd779d9dabc22d005746c62f3802678cf388911ea6b2d4c8be5683597bb2a",
   "viewer/experiments/results/lidar/final_lidar_viewer_overlay.json": "d1e275299dac40de56b87e3d5d38b0e3e2a22c3feee8302c784654a43e8bed5e",
   "viewer/experiments/results/radio/final_radio_manifest.json": "4f12ae580233fd1c21667e7c29ea79d2f60309675ab34d27249859834e4ffc14",
-  "viewer/index.html": "6c7b6f7dc5d161eae4258bf29a68862707e9fa025dc9ce07311d282aa1bfe391",
+  "viewer/index.html": "7d927bc43b8affe87e5867593fba0cc4584417ae906b88ef0adb5f38ca547f5b",
   "viewer/vendor/three-r128/GLTFLoader.js": "5c15967ba830918a9caea6338712c994c354bccd4edc4569bde411c3ec06a3e6",
   "viewer/vendor/three-r128/LICENSE.txt": "7dddf7c5b8fd10ee654db8857d75d104b5557889aa5a91fc4ca545ea7c07062f",
   "viewer/vendor/three-r128/OrbitControls.js": "02bb4ade710f3e607329e37a21f098bc3ac70eb6e33daf8a65e79f4db785e7b2",
   "viewer/vendor/three-r128/three.min.js": "9274bbcec8d96168626c732b5d31c775aa8cfb7eaa0599bec0c175908a2c1ce2",
   "viewer/web/frozen_queries.js": "2df37a1476c582ddaa9fd1577c48873b93947a9732333166955a56de025634eb",
+  "viewer/web/layout.css": "319547571b0770588ed8f9dabf4ea5ceb7db3ea69d4623a1d3bc54c939b649b7",
+  "viewer/web/layout.js": "29412dffe7f323cd0fb42399216d935ee364dfa282ba6f8e1c061c3a384e2ea2",
   "viewer/web/public_demo.js": "4b5141d14ddf135cc877cba3408b710fdd212fbd317dce3f5a8ef1ac833d5ca5",
   "viewer/web/query_engine.js": "a76e9091449908d3d522445a993a749d45f9034425dab1c12eb05d1329dbb597"
 }
