@@ -33,3 +33,23 @@
  #viewerUI{gap:6px}
  #viewerUI>nav[aria-label="Guided exploration"] .tg{font-size:11px;padding:4px 6px}
 }
+
+/* Minimal presentation mode used by the project page. */
+.embedded-demo #wrap{left:0}
+.embedded-demo #viewerHeader{display:block;max-height:none;overflow:visible}
+.embedded-demo #viewerHeader #title,.embedded-demo #viewerHeader #nlq,.embedded-demo #viewerUI>nav[aria-label="Guided exploration"]{display:none}
+.embedded-demo #viewerHeader #ctl{max-width:none;justify-content:flex-start;align-items:center;gap:8px}
+.embedded-demo #ctl #tP,.embedded-demo #ctl #tT,.embedded-demo #ctl #tN,.embedded-demo #ctl #tFocus{display:none}
+.embedded-demo #viewerDetails #leg,.embedded-demo #viewerDetails #themeLeg,.embedded-demo #viewerNotices{display:none!important}
+.embedded-demo #viewerCards{align-items:flex-end}
+.embedded-demo #viewerDetails{max-height:60%;width:300px;max-width:100%}
+.embedded-demo #viewerDetails #info{background:#fffffffa;font-size:13px}
+.embedded-demo #info h2{font-size:17px}
+.embed-hint{font-size:12px;color:#66716c;margin-left:auto}
+.embed-dismiss{display:block;margin:0 0 10px auto;font-size:12px}
+.embedded-demo .tg:focus-visible{outline:2px solid #24745f;outline-offset:3px}
+@media(max-width:680px){
+ .embedded-demo .embed-hint{display:none}
+ .embedded-demo #mobileViews [data-view="details"]{display:none}
+ .embedded-demo #viewerDetails{position:absolute;bottom:8px;left:8px;right:8px;width:auto;max-height:65%;display:flex}
+}

@@ -9,7 +9,7 @@ Code, data and a browser-based interactive demo for reviewing the material-groun
 - **Try it online:** [Launch TraceMat](https://dera8.github.io/TraceMat/) — no download or installation. A five-minute walkthrough and expected query results are included below.
 - **Verify the artifact:** run `python verify_review.py --rebuild`; see [recorded checks](REVIEW_CHECKS.json).
 
-Open **https://dera8.github.io/TraceMat/** and choose **Launch interactive demo**. The scene, graph, material layers and controlled queries run in your browser. You need an internet connection to load the site and a modern browser with WebGL; no Python, account, API key or Ollama service is required. The interactive scene is Maradona.
+Open **https://dera8.github.io/TraceMat/** and choose **Start interactive demo**. The scene opens directly in the project page. Choose **Open full viewer** for controlled queries and the complete set of material layers. The scene, graph and queries run in your browser. You need an internet connection to load the site and a modern browser with WebGL; no Python, account, API key or Ollama service is required. The interactive scene is Maradona.
 
 ## Run locally (optional)
 
@@ -21,7 +21,7 @@ Open **https://dera8.github.io/TraceMat/** and choose **Launch interactive demo*
    ```
 
    On Windows, `py start_review.py` also works. On macOS/Linux, use `python3 start_review.py` if needed.
-3. A browser opens the landing page; choose **Launch interactive demo**. Keep the terminal open while reviewing, then press Ctrl+C to stop.
+3. A browser opens the landing page; choose **Start interactive demo**. Keep the terminal open while reviewing, then press Ctrl+C to stop.
 
 Requirements: Python 3.10+ and a modern browser with WebGL (Chrome, Edge or Firefox). The launcher uses only Python's standard library. No pip install, login, GitHub access, API key, internet connection or Ollama service is required for the demo. Three.js r128 and its license are included locally. Model loading and rendering depend on the machine's graphics hardware.
 

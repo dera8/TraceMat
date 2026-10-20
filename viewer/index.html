@@ -1331,4 +1331,4 @@ function resize(){const a=document.getElementById('p3d').getBoundingClientRect()
 addEventListener('resize',resize);resize();
 (function loop(){requestAnimationFrame(loop);const t=performance.now(),dt=Math.min((t-(loop._t||t))/1000,.1);loop._t=t;
  if(controls)controls.update();updateRainFX(dt);rn.render(sc,cam);})();
-</script><script src="web/public_demo.js"></script><script src="web/layout.js"></script></body></html>
+</script><script src="web/public_demo.js"></script><script src="web/embed.js"></script><script src="web/layout.js"></script></body></html>
