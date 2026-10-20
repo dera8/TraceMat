@@ -43,9 +43,10 @@ Expected Maradona query results:
 | Supported EM properties (dry, 3.5 GHz) | 394 |
 | Road reflectance priors | 201 |
 | Geometrically recovered assignments | 0 |
-| Roofs with recorded wet-state changes | 0 |
+| Roofs marked as wettable by the exposure model | 68 |
+| Roofs with supported stored wet-state physical parameters | 0 |
 
-Zero results for the last two queries are expected in Maradona. Geometric recovery is represented in other scene graphs. Query results cover the viewer's complete graph; the paper's aggregate evaluation uses its explicit in-scope surface definition.
+Zero results for geometrically recovered assignments and roofs with supported stored wet-state parameters are expected in Maradona. Wettability and parameter availability are separate: 68 roofs are marked wettable, but their wet-state physical parameters are unavailable. The rain button controls the visual wetting preview; running a query only selects surfaces. Geometric recovery is represented in other scene graphs. Query results cover the viewer's complete graph; the paper's aggregate evaluation uses its explicit in-scope surface definition.
 
 ## Verify the data and claims
 

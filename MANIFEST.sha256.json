@@ -2,7 +2,7 @@
   ".gitattributes": "c186c12eeec6c647f48749fe312af5e7caf373ebea66921a99214386babad48d",
   ".github/workflows/pages.yml": "2b9ffd805318cb042a169f3f84d38274ce6c68cee1baf75d3bbf1f392113d776",
   ".gitignore": "7ca8efb921cd9f5688d3cee6d8312f635fdbb53e4819fa265408181a71e5431e",
-  "README.md": "82974a8b46678ffc35959ca11f62c2a18e2c6a470c80343c1a73b940d0b1ddcc",
+  "README.md": "a7553d5f593e1292b37d744875c1c0499ad6ece89ac1b924490de1d297baf285",
   "REVIEW_CHECKS.json": "fcde793f6b4ea5df1d6255d8265c1cfd9b8633f2067a6077dc09da75da59b631",
   "audit/LABELLING_PROTOCOL.md": "a068fd06619c20435a842596230af153921652cc7e7307125c9ad88f98856bb7",
   "audit/audit_tool.html": "6409839c24ce0cfea307186888010a656dc8ccf5e2b387435a07d2f9ee117cd5",
@@ -46,6 +46,6 @@
   "viewer/web/frozen_queries.js": "2df37a1476c582ddaa9fd1577c48873b93947a9732333166955a56de025634eb",
   "viewer/web/layout.css": "319547571b0770588ed8f9dabf4ea5ceb7db3ea69d4623a1d3bc54c939b649b7",
   "viewer/web/layout.js": "29412dffe7f323cd0fb42399216d935ee364dfa282ba6f8e1c061c3a384e2ea2",
-  "viewer/web/public_demo.js": "4b5141d14ddf135cc877cba3408b710fdd212fbd317dce3f5a8ef1ac833d5ca5",
+  "viewer/web/public_demo.js": "b0d8f986c18a8aa551514cb07c46f094bec1e59a9c8d6cfcc0cf3e500297ce02",
   "viewer/web/query_engine.js": "a76e9091449908d3d522445a993a749d45f9034425dab1c12eb05d1329dbb597"
 }

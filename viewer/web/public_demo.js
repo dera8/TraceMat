@@ -3,7 +3,8 @@
  const entries=[
   {id:'brick',question:'Which surfaces are brick?',query:{op:'filter',material_class:'brick'}},
   {id:'unresolved',question:'Show unresolved surfaces.',query:{op:'provenance_filter',evidence_tier:'unresolved'}},
-  {id:'wet',question:'Which roofs change state when wet?',query:{op:'filter',surface:'roof',has_wet_state:true}},
+  {id:'wet',question:'Which roofs can get wet in the rain?',query:{op:'filter',surface:'roof',wettable:true},explanation:'Selects roofs marked as wettable by the recorded exposure model. Use the rain button to preview the visual wetting effect; this query only highlights the roofs.'},
+  {id:'wet-recorded',question:'Which roofs have recorded wet-state physical parameters?',query:{op:'filter',surface:'roof',has_wet_state:true},explanation:'Checks for supported stored wet-state parameters, not whether a roof can get wet. Maradona has 68 wettable roofs but none with these parameters. Historical reflectance estimates are excluded from this availability check.'},
   {id:'geometry',question:'Show geometrically recovered assignments.',query:{op:'provenance_filter',evidence_tier:'geometric'}},
   {id:'radio',question:'Which surfaces have supported EM properties?',query:{op:'radio_materials',frequency_ghz:3.5,state:'dry'}},
   {id:'lidar',question:'Show road reflectance priors.',query:{op:'lidar_pseudoreflectance',surface:'road'}},
@@ -19,7 +20,7 @@
  const note=document.createElement('div');note.textContent='Queries run over the published graph in your browser. No account, installation or model service is required.';note.style.cssText='font-size:13px;line-height:1.4;color:#46525c;background:#fff;padding:6px 8px;border-radius:6px';panel.appendChild(note);
  window.nlqDirectQuery=question=>{
   const e=entries.find(x=>x.question===question);
-  return e?{think:'Frozen typed query, executed over the published graph.',query:structuredClone(e.query)}:null;
+  return e?{think:e.explanation||'Frozen typed query, executed over the published graph.',query:structuredClone(e.query)}:null;
  };
  const execute=id=>{const entry=entries.find(e=>e.id===id);if(!entry||nlqBusy)return;pick.value=id;input.value=entry.question;return nlqAsk();};
  const run=document.getElementById('nlqGo');run.textContent='Run';run.onclick=()=>execute(pick.value);
