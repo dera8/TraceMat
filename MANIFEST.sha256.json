@@ -44,9 +44,9 @@
   "viewer/vendor/three-r128/LICENSE.txt": "7dddf7c5b8fd10ee654db8857d75d104b5557889aa5a91fc4ca545ea7c07062f",
   "viewer/vendor/three-r128/OrbitControls.js": "02bb4ade710f3e607329e37a21f098bc3ac70eb6e33daf8a65e79f4db785e7b2",
   "viewer/vendor/three-r128/three.min.js": "9274bbcec8d96168626c732b5d31c775aa8cfb7eaa0599bec0c175908a2c1ce2",
-  "viewer/web/embed.js": "2c8e7bd4b54570a915dcd3dbff75a0f71160ad324fd8fe3846cc63cf8d888fb3",
+  "viewer/web/embed.js": "b7f43ca3d6f472ebbedf1857d439198ab3699ec80a506dc2fc1d36513a71759e",
   "viewer/web/frozen_queries.js": "2df37a1476c582ddaa9fd1577c48873b93947a9732333166955a56de025634eb",
-  "viewer/web/layout.css": "93f6499cc1cc1d77b97b1a5660f9c10c0f0d7e0dc15ce47c40fcd7ecf01b11f7",
+  "viewer/web/layout.css": "4b662f89db05ac93fe13c7f5c3b14fbe0f36af0da64c82c9b42a317cb9307e89",
   "viewer/web/layout.js": "29412dffe7f323cd0fb42399216d935ee364dfa282ba6f8e1c061c3a384e2ea2",
   "viewer/web/public_demo.js": "b0d8f986c18a8aa551514cb07c46f094bec1e59a9c8d6cfcc0cf3e500297ce02",
   "viewer/web/query_engine.js": "a76e9091449908d3d522445a993a749d45f9034425dab1c12eb05d1329dbb597"
