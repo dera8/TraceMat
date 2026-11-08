@@ -1,5 +1,7 @@
 # TraceMat
 
+Companion repository for **Beyond Coverage: Auditable Material-Grounded Urban Knowledge for Network Intelligence**, by Debora Russo, Domenico Amalfitano, Nicola Mazzocca and Valeria Vittorini (University of Naples Federico II). AI4DEMONS'26, workshop at CIKM 2026, Rome.
+
 Code, data and a browser-based interactive demo for reviewing the material-grounded urban graph, its evidence, and the radio/LiDAR property layers. The interactive scene is Maradona; the recorded graphs and reconstruction checks cover all three evaluated scenes.
 
 ## Start here
@@ -47,6 +49,10 @@ Expected Maradona query results:
 | Roofs with supported stored wet-state physical parameters | 0 |
 
 Zero results for geometrically recovered assignments and roofs with supported stored wet-state parameters are expected in Maradona. Wettability and parameter availability are separate: 68 roofs are marked wettable, but their wet-state physical parameters are unavailable. The rain button controls the visual wetting preview; running a query only selects surfaces. Geometric recovery is represented in other scene graphs. Query results cover the viewer's complete graph; the paper's aggregate evaluation uses its explicit in-scope surface definition.
+
+## Note on Fig. 3 of the paper
+
+Fig. 3 was captured with an earlier version of the viewer, which filled missing wet-state values with a fallback. It shows a plaster roof going from permittivity 2.73 to 6 and conductivity 0.0276 to 0.2 S/m when wet. Those wet values are not part of the released graph. ITU-R P.2040 gives wet-state parameters only for ground, so plaster roofs are marked wettable but have no wet radio-material record (`wet_src`: no wet endpoint defined for 'plaster'). In the released data, the wet state changes the radio record only for the 137 asphalt roads in Maradona (ITU medium-dry to wet ground at 3.5 GHz: permittivity 13.2 to 18.2, conductivity 0.27 to 0.765 S/m), consistent with Table 4. The behaviour the figure illustrates is unchanged: switching state retrieves a different record and changes no geometry.
 
 ## Verify the data and claims
 
